@@ -12,6 +12,10 @@ const poppins = Poppins({
 export const metadata = {
   title: "Living Room Ice Cream",
   description: "POS PWA Application",
+  icons: {
+    icon: "/favicon-32x32.png",
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({ children }) {
