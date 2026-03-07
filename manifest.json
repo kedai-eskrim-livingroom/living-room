@@ -1,0 +1,20 @@
+{
+  "name": "Living Room POS Ice Cream",
+  "short_name": "IceCream",
+  "description": "Aplikasi Kasir Kedai Es Krim Living Room",
+  "start_url": "/login",
+  "display": "standalone",
+  "background_color": "#F8F9FA",
+  "theme_color": "#FF7A00",
+  "icons": [{
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
