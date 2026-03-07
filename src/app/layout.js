@@ -16,6 +16,20 @@ export const metadata = {
     icon: "/favicon-32x32.png",
     apple: "/apple-touch-icon.png",
   },
+  openGraph: {
+    type: "website",
+    locale: "id_ID",
+    url: "/",
+    siteName: "Kedai Ice Cream Living Room",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 320,
+        height: 640,
+        alt: "Kedai Ice Cream Living Room",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({ children }) {

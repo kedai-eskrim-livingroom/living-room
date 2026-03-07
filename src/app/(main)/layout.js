@@ -17,7 +17,7 @@ export default function AppLayout({ children }) {
       <div className="flex-1 flex flex-col overflow-hidden">
 
         {/* HEADER MOBILE */}
-        <header className="md:hidden flex items-center gap-3 bg-white px-5 py-4 border-b shadow-sm z-10">
+        <header className="md:hidden flex items-center gap-3 bg-white px-5 py-4 z-10">
 
           {/* Tombol Drawer Menggunakan Gambar Custom */}
           <Sheet>
