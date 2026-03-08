@@ -1,6 +1,6 @@
 {
   "name": "Living Room POS Ice Cream",
-  "short_name": "IceCream",
+  "short_name": "Ice Cream",
   "description": "Aplikasi Kasir Kedai Es Krim Living Room",
   "start_url": "/",
   "display": "standalone",
