@@ -1,15 +1,17 @@
-import withPWAInit from "@ducanh2912/next-pwa";
-
-const withPWA = withPWAInit({
-  dest: "public",
-  disable: process.env.NODE_ENV === "development",
-  register: true,
-  skipWaiting: true,
-});
 /** @type {import('next').NextConfig} */
+import withPWA from "next-pwa";
 
 const nextConfig = {
-  /* config options here */
+  images: {
+    domains: ["res.cloudinary.com", "cdn-icons-png.freepik.com"],
+  },
 };
 
-export default withPWA(nextConfig);
+const config = withPWA({
+  dest: "public",
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === "development",
+})(nextConfig);
+
+export default nextConfig;
