@@ -16,8 +16,8 @@ import { logoutUser } from "@/utils/auth";
 
 // Daftar menu navigasi sesuai desain
 const menuItems = [
-  { name: "Pesanan", href: "/pesanan", icon: LayoutGrid },
-  { name: "Riwayat", href: "/riwayat", icon: History },
+  { name: "Pesanan", href: "/admin/dashboard", icon: LayoutGrid },
+  { name: "Riwayat", href: "/admin/history", icon: History },
   { name: "Menu", href: "/menu", icon: Utensils },
   { name: "Voucher", href: "/voucher", icon: Ticket },
 ];

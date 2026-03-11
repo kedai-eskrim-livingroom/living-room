@@ -55,8 +55,8 @@ export default function AppLayout({ children }) {
         </header>
 
         {/* 3. RENDER KONTEN HALAMAN */}
-        <main className="flex-1 overflow-y-auto p-6">
-          <div className="max-w-7xl mx-auto bg-white">
+        <main className="flex-1 overflow-y-auto p-4 bg-white">
+          <div className="max-w-7xl mx-auto">
             {children}
           </div>
         </main>
