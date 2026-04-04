@@ -17,6 +17,7 @@ import {
   DialogTitle,
   DialogClose,
 } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import DateRangeModal from "@/components/DateRangeModal";
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -33,6 +34,29 @@ function parseRupiah(value) {
 function formatDateDisplay(dateStr) {
   if (!dateStr) return "-";
   return format(new Date(dateStr), "dd MMMM yyyy", { locale: localeId });
+}
+
+// ─── API Mapping Helpers ─────────────────────────────────────────────────────
+
+/** Normalize API response (snake_case) → UI (camelCase) */
+function normalizeVoucher(v) {
+  return {
+    id: v.id,
+    code: v.code ?? "",
+    discount: v.discount ?? 0,
+    startDate: v.start_date ?? v.startDate ?? "",
+    endDate: v.end_date ?? v.endDate ?? "",
+  };
+}
+
+/** Map form data (camelCase) → API payload (snake_case) */
+function toPayload({ code, discount, startDate, endDate }) {
+  return {
+    code,
+    discount,
+    startDate,
+    endDate,
+  };
 }
 
 // ─── Voucher Form Modal (Tambah / Edit) ─────────────────────────────────────
@@ -292,6 +316,9 @@ function DeleteModal({ isOpen, onClose, onConfirm, voucher }) {
         showCloseButton={false}
         className="max-w-none! w-[calc(100%-2rem)] sm:max-w-xs bg-[#FFF8F0] rounded-3xl! border-none shadow-2xl p-6 gap-0"
       >
+        <VisuallyHidden>
+          <DialogTitle>Konfirmasi Hapus Voucher</DialogTitle>
+        </VisuallyHidden>
         <div className="flex flex-col items-center text-center gap-3">
           <h2 className="text-lg font-bold text-gray-900">
             Hapus voucher{" "}
@@ -417,8 +444,9 @@ export default function VoucherPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await getVoucher();
-      setVouchers(Array.isArray(data) ? data : data?.data ?? []);
+      const raw = await getVoucher();
+      const list = Array.isArray(raw) ? raw : raw?.data ?? [];
+      setVouchers(list.map(normalizeVoucher));
     } catch (err) {
       setError("Gagal memuat data voucher. Coba muat ulang.");
     } finally {
@@ -437,12 +465,12 @@ export default function VoucherPage() {
 
   // ── Handlers ──
   const handleCreate = async (payload) => {
-    await createVoucher(payload);
+    await createVoucher(toPayload(payload));
     await fetchVouchers();
   };
 
   const handleUpdate = async (payload) => {
-    await updateVoucher(formModal.editData.id, payload);
+    await updateVoucher(formModal.editData.id, toPayload(payload));
     await fetchVouchers();
   };
 
@@ -477,7 +505,7 @@ export default function VoucherPage() {
         className="w-full bg-[#FF7A00] hover:bg-[#E56E00] text-white font-bold text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 mb-5 transition-colors shadow-sm"
       >
         <Plus className="w-4 h-4" strokeWidth={2.5} />
-        Tambah Menu
+        Tambah Voucher
       </button>
 
       {/* Error state */}

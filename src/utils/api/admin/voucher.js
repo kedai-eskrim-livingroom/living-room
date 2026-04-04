@@ -21,8 +21,9 @@ export async function updateVoucher(id, formData) {
 }
 
 export async function deleteVoucher(id) {
-    const res = await axiosInstance.delete(`/vouchers/${id}`, {
+    const res = await axiosInstance.delete(`/vouchers`, {
         headers: { "Content-Type": "application/json" },
+        data: { id: [id] },
     });
     return res.data;
 }
