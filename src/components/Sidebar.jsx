@@ -18,8 +18,8 @@ import { logoutUser } from "@/utils/auth";
 const menuItems = [
   { name: "Pesanan", href: "/admin/dashboard", icon: LayoutGrid },
   { name: "Riwayat", href: "/admin/history", icon: History },
-  { name: "Menu", href: "/menu", icon: Utensils },
-  { name: "Voucher", href: "/voucher", icon: Ticket },
+  { name: "Menu", href: "/admin/menu", icon: Utensils },
+  { name: "Voucher", href: "/admin/voucher", icon: Ticket },
 ];
 
 export default function SidebarContent() {
@@ -28,7 +28,7 @@ export default function SidebarContent() {
 
   const handleLogout = () => {
     logoutUser(); // Menghapus cookie token
-    window.location.href = "/login"; // Redirect ke halaman login
+    window.location.href = "/"; // Redirect ke halaman login
   };
 
   return (
