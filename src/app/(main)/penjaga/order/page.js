@@ -1,94 +1,87 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getMenuPenjaga } from "./menu";
 import Image from "next/image";
+import { getMenuPenjaga } from "@/utils/api/penjaga/menu";
 
-// Fallback data jika API belum tersedia
-const FALLBACK_MENUS = [
-  { id: 1, name: "1 Scoop", price: 4000, image: "/images/1scoop.jpg" },
-  { id: 2, name: "2 Scoop", price: 7000, image: "/images/2scoop.jpg" },
-  { id: 3, name: "Es Cemil", price: 10000, image: "/images/escemil.jpg" },
-  { id: 4, name: "Ice cream cup", price: 5000, image: "/images/icecreamcup.jpg" },
-  { id: 5, name: "Kul - kul", price: 2500, image: "/images/kulkul.jpg" },
-  { id: 6, name: "Muffle", price: 8000, image: "/images/muffle.jpg" },
-  { id: 7, name: "Waffle", price: 8000, image: "/images/waffle.jpg" },
-  { id: 8, name: "Croffle", price: 12000, image: "/images/croffle.jpg" },
-  { id: 9, name: "Soda float", price: 8000, image: "/images/sodafloat.jpg" },
-  { id: 10, name: "Hot dog", price: 8000, image: "/images/hotdog.jpg" },
-];
+// ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function formatRupiah(amount) {
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0,
-  })
-    .format(amount)
-    .replace("IDR", "Rp.");
+  return (
+    "Rp." +
+    Number(amount).toLocaleString("id-ID", { minimumFractionDigits: 0 })
+  );
 }
 
+// ─── Skeleton Card ────────────────────────────────────────────────────────────
+
+function SkeletonCard() {
+  return (
+    <div className="bg-white rounded-2xl border border-[#F5E6C8] overflow-hidden animate-pulse">
+      <div className="aspect-square bg-[#F5E6C8]" />
+      <div className="px-3 py-3 space-y-2">
+        <div className="h-3 bg-[#F5E6C8] rounded w-3/4 mx-auto" />
+        <div className="h-3 bg-[#FFD9B3] rounded w-1/2 mx-auto" />
+      </div>
+    </div>
+  );
+}
+
+// ─── Menu Card ────────────────────────────────────────────────────────────────
+
 function MenuCard({ item, onAdd }) {
-  const [added, setAdded] = useState(false);
+  const [tapped, setTapped] = useState(false);
 
   const handleAdd = () => {
-    setAdded(true);
+    setTapped(true);
     onAdd(item);
-    setTimeout(() => setAdded(false), 800);
+    setTimeout(() => setTapped(false), 700);
   };
 
   return (
     <div
-      className="menu-card group relative bg-[#FFF8EE] rounded-2xl overflow-hidden border border-[#F5E6C8] shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col"
       onClick={handleAdd}
+      className={`bg-white rounded-2xl border border-[#F5E6C8] overflow-hidden cursor-pointer transition-all duration-200 active:scale-95 ${
+        tapped ? "ring-2 ring-[#FF8C42]" : ""
+      }`}
     >
-      {/* Image area */}
-      <div className="relative w-full aspect-square bg-[#FFF3DE] overflow-hidden flex items-center justify-center">
+      {/* Image */}
+      <div className="relative w-full aspect-square bg-[#FFF8EE] flex items-center justify-center overflow-hidden">
         {item.image ? (
           <img
             src={item.image}
             alt={item.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover"
             onError={(e) => {
               e.target.style.display = "none";
               e.target.nextSibling.style.display = "flex";
             }}
           />
         ) : null}
-        {/* Placeholder icon jika gambar tidak ada */}
+        {/* Fallback emoji */}
         <div
-          className="absolute inset-0 flex items-center justify-center text-5xl"
+          className="absolute inset-0 items-center justify-center text-5xl"
           style={{ display: item.image ? "none" : "flex" }}
         >
           🍦
         </div>
 
-        {/* Add button overlay */}
-        <div
-          className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${
-            added ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-          }`}
-        >
-          <div
-            className={`w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all duration-200 ${
-              added
-                ? "bg-green-500 scale-110"
-                : "bg-[#FF8C42] hover:bg-[#FF7A2E]"
-            }`}
-          >
-            <span className="text-white text-xl font-bold leading-none">
-              {added ? "✓" : "+"}
-            </span>
+        {/* Tap feedback overlay */}
+        {tapped && (
+          <div className="absolute inset-0 bg-[#FF8C42]/10 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-[#FF8C42] flex items-center justify-center shadow-md">
+              <span className="text-white text-lg font-bold">✓</span>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Info */}
-      <div className="px-3 py-3 flex flex-col gap-1">
-        <p className="font-semibold text-[#2D2013] text-sm leading-tight text-center">
+      <div className="px-2 py-2.5 text-center">
+        <p className="text-[#2D2013] font-semibold text-sm leading-tight">
           {item.name}
         </p>
-        <p className="text-[#FF8C42] font-bold text-sm text-center">
+        <p className="text-[#FF8C42] font-bold text-sm mt-0.5">
           {formatRupiah(item.price)}
         </p>
       </div>
@@ -96,36 +89,27 @@ function MenuCard({ item, onAdd }) {
   );
 }
 
-function CartToast({ count }) {
-  if (count === 0) return null;
-  return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-bounce-in">
-      <div className="bg-[#FF8C42] text-white px-5 py-3 rounded-full shadow-xl flex items-center gap-2 font-semibold text-sm whitespace-nowrap">
-        <span>🛒</span>
-        <span>{count} item dalam keranjang</span>
-      </div>
-    </div>
-  );
-}
+// ─── Main Page ────────────────────────────────────────────────────────────────
 
-export default function Order() {
+export default function OrderPage() {
   const [menus, setMenus] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [cart, setCart] = useState([]);
+  const [search, setSearch] = useState("");
   const [showToast, setShowToast] = useState(false);
-  const [toastTimeout, setToastTimeout] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [toastTimer, setToastTimer] = useState(null);
 
+  // ── Fetch menus ──
   useEffect(() => {
     async function fetchMenus() {
       try {
-        const data = await getMenuPenjaga();
-        setMenus(data?.data || data || FALLBACK_MENUS);
+        const res = await getMenuPenjaga();
+        const list = Array.isArray(res) ? res : res?.data ?? [];
+        setMenus(list);
       } catch (err) {
         console.error("Gagal fetch menu:", err);
-        setMenus(FALLBACK_MENUS);
-        setError("Menampilkan data contoh.");
+        setError("Gagal memuat menu. Periksa koneksi Anda.");
       } finally {
         setLoading(false);
       }
@@ -133,6 +117,7 @@ export default function Order() {
     fetchMenus();
   }, []);
 
+  // ── Cart logic ──
   const handleAddToCart = (item) => {
     setCart((prev) => {
       const existing = prev.find((c) => c.id === item.id);
@@ -145,25 +130,26 @@ export default function Order() {
     });
 
     setShowToast(true);
-    if (toastTimeout) clearTimeout(toastTimeout);
-    const t = setTimeout(() => setShowToast(false), 2500);
-    setToastTimeout(t);
+    if (toastTimer) clearTimeout(toastTimer);
+    const t = setTimeout(() => setShowToast(false), 2000);
+    setToastTimer(t);
   };
 
   const totalItems = cart.reduce((sum, c) => sum + c.qty, 0);
+  const totalPrice = cart.reduce((sum, c) => sum + c.price * c.qty, 0);
 
-  const filteredMenus = menus.filter((m) =>
-    m.name?.toLowerCase().includes(searchQuery.toLowerCase())
+  const filtered = menus.filter((m) =>
+    m.name?.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <div className="min-h-screen bg-[#FFFBF5] font-['Nunito',sans-serif]">
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-[#F5E6C8] px-4 py-3">
+    <div className="min-h-screen bg-[#FFFBF5]">
+      {/* ── Header ── */}
+      <header className="sticky top-0 z-40 bg-white border-b border-[#F5E6C8] px-4 py-3">
         <div className="max-w-md mx-auto flex items-center justify-between">
-          {/* Logo area */}
-          <div className="flex items-center gap-2">
-            <button className="w-9 h-9 bg-[#FF8C42] rounded-lg flex items-center justify-center shadow">
+          {/* Logo */}
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 bg-[#FF8C42] rounded-lg flex items-center justify-center shadow-sm shrink-0">
               <svg
                 className="w-5 h-5 text-white"
                 fill="none"
@@ -177,22 +163,28 @@ export default function Order() {
                   d="M4 6h16M4 12h16M4 18h16"
                 />
               </svg>
-            </button>
-            <div className="flex flex-col leading-tight">
-              <span className="text-[#2D2013] font-extrabold text-base tracking-tight">
-                LIVINGROOM
-              </span>
+            </div>
+            <div className="leading-tight">
+              <div className="flex items-center gap-1.5">
+                {/* Flame icon */}
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#FF8C42">
+                  <path d="M12 2C9.5 5 8 7.5 9.5 10.5c-1.5-1-2-2.5-1.5-4C5 9 4 12 6 14.5c-1.5-.5-2-1.5-2-2.5C2 16 4 20 9 21.5c-1-.5-1.5-1.5-1-2.5C9.5 21 11 21.5 12 21.5c4.5 0 8-3.5 8-8 0-5-4-8-8-11.5z" />
+                </svg>
+                <span className="text-[#2D2013] font-extrabold text-base tracking-tight">
+                  LIVINGROOM
+                </span>
+              </div>
               <span className="text-[#B89A6A] text-[9px] tracking-widest uppercase">
                 The Genuine Fashion Outlet
               </span>
             </div>
           </div>
 
-          {/* Cart button */}
+          {/* Cart icon */}
           <button className="relative w-9 h-9 flex items-center justify-center">
             <span className="text-2xl">🛒</span>
             {totalItems > 0 && (
-              <span className="absolute -top-1 -right-1 bg-[#FF8C42] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-[#FF8C42] text-white text-[10px] font-bold min-w-[18px] h-[18px] rounded-full flex items-center justify-center px-1">
                 {totalItems}
               </span>
             )}
@@ -200,93 +192,76 @@ export default function Order() {
         </div>
       </header>
 
-      {/* Main content */}
-      <main className="max-w-md mx-auto px-4 pb-28">
-        {/* Page title */}
-        <div className="pt-5 pb-3">
-          <h1 className="text-2xl font-extrabold text-[#2D2013] tracking-tight">
-            Pesanan
-          </h1>
-          <p className="text-[#B89A6A] text-sm mt-0.5">
-            Pilih menu favoritmu 🍦
-          </p>
+      {/* ── Main ── */}
+      <main className="max-w-md mx-auto px-4 pb-32">
+        {/* Title */}
+        <div className="pt-5 pb-4">
+          <h1 className="text-2xl font-extrabold text-[#2D2013]">Pesanan</h1>
         </div>
 
-        {/* Search bar */}
-        <div className="mb-4 relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#C4A882]">
+        {/* Search */}
+        <div className="relative mb-4">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#C4A882] text-base">
             🔍
           </span>
           <input
             type="text"
             placeholder="Cari menu..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 bg-white border border-[#F0DEC0] rounded-xl text-sm text-[#2D2013] placeholder-[#C4A882] focus:outline-none focus:ring-2 focus:ring-[#FF8C42]/30 focus:border-[#FF8C42]"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full pl-9 pr-4 py-2.5 bg-white border border-[#F0DEC0] rounded-xl text-sm text-[#2D2013] placeholder-[#C4A882] focus:outline-none focus:ring-2 focus:ring-[#FF8C42]/30 focus:border-[#FF8C42] transition-colors"
           />
         </div>
 
-        {/* Error notice */}
+        {/* Error */}
         {error && (
-          <div className="mb-3 px-3 py-2 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-700">
+          <div className="mb-4 px-3 py-2 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-700">
             ⚠️ {error}
           </div>
         )}
 
-        {/* Loading skeleton */}
+        {/* Grid */}
         {loading ? (
           <div className="grid grid-cols-2 gap-3">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div
-                key={i}
-                className="bg-[#FFF8EE] rounded-2xl overflow-hidden border border-[#F5E6C8] animate-pulse"
-              >
-                <div className="aspect-square bg-[#F5E6C8]" />
-                <div className="p-3 space-y-2">
-                  <div className="h-3 bg-[#F5E6C8] rounded w-3/4 mx-auto" />
-                  <div className="h-3 bg-[#FFD9B3] rounded w-1/2 mx-auto" />
-                </div>
-              </div>
+              <SkeletonCard key={i} />
             ))}
           </div>
-        ) : filteredMenus.length === 0 ? (
+        ) : filtered.length === 0 ? (
           <div className="text-center py-20 text-[#C4A882]">
             <div className="text-5xl mb-3">🍦</div>
-            <p className="font-semibold">Menu tidak ditemukan</p>
+            <p className="font-semibold text-sm">Menu tidak ditemukan</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3">
-            {filteredMenus.map((item) => (
+            {filtered.map((item) => (
               <MenuCard key={item.id} item={item} onAdd={handleAddToCart} />
             ))}
           </div>
         )}
       </main>
 
-      {/* Cart Toast */}
-      {showToast && <CartToast count={totalItems} />}
+      {/* ── Cart Bar (bottom) ── */}
+      {totalItems > 0 && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-5 pt-2 bg-gradient-to-t from-[#FFFBF5] via-[#FFFBF5]/90 to-transparent">
+          <button className="w-full max-w-md mx-auto flex items-center justify-between bg-[#FF8C42] hover:bg-[#e57a35] active:scale-[0.98] transition-all text-white rounded-2xl px-5 py-4 shadow-lg shadow-[#FF8C42]/30 block">
+            <div className="flex items-center gap-2">
+              <span className="text-xl">🛒</span>
+              <span className="font-bold text-sm">{totalItems} item</span>
+            </div>
+            <span className="font-bold text-sm">{formatRupiah(totalPrice)}</span>
+          </button>
+        </div>
+      )}
 
-      <style jsx global>{`
-        @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap");
-
-        @keyframes bounce-in {
-          0% {
-            opacity: 0;
-            transform: translateX(-50%) translateY(20px) scale(0.9);
-          }
-          60% {
-            transform: translateX(-50%) translateY(-4px) scale(1.02);
-          }
-          100% {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0) scale(1);
-          }
-        }
-
-        .animate-bounce-in {
-          animation: bounce-in 0.35s ease-out forwards;
-        }
-      `}</style>
+      {/* ── Toast ── */}
+      {showToast && (
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
+          <div className="bg-[#2D2013] text-white text-xs font-semibold px-4 py-2 rounded-full shadow-lg whitespace-nowrap animate-bounce">
+            ✓ Ditambahkan ke keranjang
+          </div>
+        </div>
+      )}
     </div>
   );
 }
