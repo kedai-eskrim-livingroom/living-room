@@ -21,7 +21,7 @@ export async function updateMenu(id, formData) {
 
 export async function deleteMenu(id) {
     const res = await axiosInstance.delete("/menus", {
-        data: { "id": id },
+        data: { id: [id] },
         headers: { "Content-Type": "application/json" },
     });
     return res.data;
