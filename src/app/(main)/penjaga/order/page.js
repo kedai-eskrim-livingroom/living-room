@@ -1,216 +1,359 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import useSWR from "swr";
+import Image from "next/image";
+
 import { getMenuPenjaga } from "@/utils/api/penjaga/menu";
+import { validateVoucher } from "@/utils/api/penjaga/voucher";
+import { createOrder } from "@/utils/api/penjaga/order";
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
-function formatRupiah(amount) {
-  if (!amount && amount !== 0) return "Rp 0";
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0,
-  })
-    .format(amount)
-    .replace("IDR\u00a0", "Rp");
-}
+import {
+  IconReceipt, IconArrowNarrowLeft, IconTicket,
+  IconChevronRight, IconQrcode, IconCashBanknote,
+  IconDeviceFloppy, IconX, IconLoader2, IconCheck
+} from "@tabler/icons-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
-// ─── Skeleton Card ────────────────────────────────────────────────────────────
-function SkeletonCard() {
-  return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden animate-pulse">
-      <div className="aspect-square bg-gray-200" />
-      <div className="p-4 space-y-2">
-        <div className="h-4 bg-gray-200 rounded w-3/4" />
-        <div className="h-4 bg-orange-200 rounded w-1/2" />
-      </div>
-    </div>
-  );
-}
+const fetcher = async () => {
+  const response = await getMenuPenjaga();
+  return response?.data ? response.data : (Array.isArray(response) ? response : []);
+};
 
-// ─── Menu Card ────────────────────────────────────────────────────────────────
-function MenuCard({ item, onAdd }) {
-  const [tapped, setTapped] = useState(false);
-
-  const handleAdd = () => {
-    setTapped(true);
-    onAdd(item);
-    setTimeout(() => setTapped(false), 300);
-  };
-
-  return (
-    <div
-      onClick={handleAdd}
-      className={`bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden cursor-pointer transition-all duration-200 hover:shadow-md hover:border-orange-200 active:scale-95 ${
-        tapped ? "ring-2 ring-[#FF8C42]" : ""
-      }`}
-    >
-      {/* Area Gambar */}
-      <div className="relative w-full aspect-square bg-orange-50 flex items-center justify-center overflow-hidden">
-        {item.photo ? (
-          <img
-            src={item.photo}
-            alt={item.name}
-            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-            onError={(e) => {
-              e.target.style.display = "none";
-              e.target.nextSibling.style.display = "flex";
-            }}
-          />
-        ) : null}
-        
-        {/* Fallback emoji jika gambar tidak ada/error */}
-        <div
-          className="absolute inset-0 items-center justify-center text-5xl bg-gray-50"
-          style={{ display: item.photo ? "none" : "flex" }}
-        >
-          🍦
-        </div>
-
-        {/* Efek klik */}
-        {tapped && (
-          <div className="absolute inset-0 bg-[#FF8C42]/20 flex items-center justify-center backdrop-blur-[1px]">
-            <div className="w-12 h-12 rounded-full bg-[#FF8C42] flex items-center justify-center shadow-lg transform scale-in">
-              <span className="text-white text-xl font-bold">✓</span>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Info Menu */}
-      <div className="p-4">
-        <p className="text-gray-900 font-bold text-sm mb-1 truncate">
-          {item.name}
-        </p>
-        <p className="text-[#FF8C42] font-extrabold text-sm">
-          {formatRupiah(item.price)}
-        </p>
-      </div>
-    </div>
-  );
-}
-
-// ─── Main Page ────────────────────────────────────────────────────────────────
-export default function OrderPage() {
-  const [menus, setMenus] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+export default function POSPage() {
+  const [activeScreen, setActiveScreen] = useState("catalog");
   const [cart, setCart] = useState([]);
-  const [showToast, setShowToast] = useState(false);
-  const [toastTimer, setToastTimer] = useState(null);
 
-  // ── Fetch menus ──
-  useEffect(() => {
-    async function fetchMenus() {
-      try {
-        const res = await getMenuPenjaga();
-        const list = Array.isArray(res) ? res : res?.data ?? [];
-        setMenus(list);
-      } catch (err) {
-        console.error("Gagal fetch menu:", err);
-        setError("Gagal memuat menu. Periksa koneksi Anda.");
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchMenus();
-  }, []);
+  const [toast, setToast] = useState({ show: false, message: "", type: "success" });
 
-  // ── Cart logic ──
-  const handleAddToCart = (item) => {
-    setCart((prev) => {
-      const existing = prev.find((c) => c.id === item.id);
-      if (existing) {
-        return prev.map((c) =>
-          c.id === item.id ? { ...c, qty: c.qty + 1 } : c
-        );
-      }
-      return [...prev, { ...item, qty: 1 }];
-    });
+  const [voucherInput, setVoucherInput] = useState("");
+  const [appliedVoucher, setAppliedVoucher] = useState(null);
+  const [discount, setDiscount] = useState(0);
+  const [isCheckingVoucher, setIsCheckingVoucher] = useState(false);
 
-    setShowToast(true);
-    if (toastTimer) clearTimeout(toastTimer);
-    const t = setTimeout(() => setShowToast(false), 2000);
-    setToastTimer(t);
+  const [paymentMethod, setPaymentMethod] = useState("QRIS");
+  const [isPaymentSheetOpen, setIsPaymentSheetOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const { data: menus = [], isLoading: isLoadingMenus, error } = useSWR('menus', fetcher);
+
+  const showToast = (message, type = "success") => {
+    setToast({ show: true, message, type });
+    setTimeout(() => {
+      setToast(prev => ({ ...prev, show: false }));
+    }, 2000);
   };
 
-  const totalItems = cart.reduce((sum, c) => sum + c.qty, 0);
-  const totalPrice = cart.reduce((sum, c) => sum + c.price * c.qty, 0);
+  const handleItemClick = (menu) => {
+    setCart((prev) => {
+      const existing = prev.find((item) => item.id === menu.id);
+      if (existing) {
+        return prev.map((item) => item.id === menu.id ? { ...item, qty: item.qty + 1 } : item);
+      }
+      return [...prev, { ...menu, qty: 1 }];
+    });
+  };
+
+  // PERBAIKAN: Item akan terhapus jika qty mencapai 0
+  const updateQty = (id, delta) => {
+    setCart((prev) => {
+      const newCart = prev
+        .map((item) => {
+          if (item.id === id) {
+            return { ...item, qty: item.qty + delta };
+          }
+          return item;
+        })
+        .filter((item) => item.qty > 0); // Hapus item yang qty-nya 0
+
+      // UX Tambahan: Jika di HP layar keranjang kosong karena dihapus, otomatis balik ke katalog
+      if (newCart.length === 0 && activeScreen === "cart" && window.innerWidth < 1024) {
+        setActiveScreen("catalog");
+      }
+
+      return newCart;
+    });
+  };
+
+  const totalItems = cart.reduce((total, item) => total + item.qty, 0);
+  const subTotal = cart.reduce((total, item) => total + (item.price * item.qty), 0);
+  const grandTotal = Math.max(0, subTotal - discount);
+
+  const handleApplyVoucher = async () => {
+    if (!voucherInput.trim()) return;
+    try {
+      setIsCheckingVoucher(true);
+      const res = await validateVoucher({ code: voucherInput.toUpperCase() });
+      setAppliedVoucher(res.data || res);
+      setDiscount(res.data?.discount || res?.discount || 0);
+      showToast("Voucher berhasil digunakan!", "success");
+    } catch (err) {
+      showToast(err.response?.data?.message || "Voucher tidak valid / kedaluwarsa.", "error");
+      setAppliedVoucher(null);
+      setDiscount(0);
+    } finally {
+      setIsCheckingVoucher(false);
+    }
+  };
+
+  const handleRemoveVoucher = () => {
+    setVoucherInput("");
+    setAppliedVoucher(null);
+    setDiscount(0);
+  };
+
+  const handleSaveOrder = async () => {
+    if (cart.length === 0) return showToast("Keranjang masih kosong!", "error");
+    try {
+      setIsSaving(true);
+      const payload = {
+        paymentMethod: paymentMethod,
+        voucherId: appliedVoucher ? appliedVoucher.id : null,
+        items: cart.map(item => ({
+          menuId: item.id,
+          qty: item.qty,
+          price: item.price
+        }))
+      };
+      await createOrder(payload);
+
+      showToast("Pesanan berhasil disimpan!", "success");
+      setCart([]);
+      handleRemoveVoucher();
+      setActiveScreen("catalog");
+    } catch (err) {
+      showToast("Gagal menyimpan pesanan. Silakan coba lagi.", "error");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
-    <main className="w-full bg-gray-50 min-h-screen p-4 md:p-8 relative pb-24">
-      <div className="max-w-6xl mx-auto">
-        
-        {/* Title */}
-        <div className="flex items-center justify-between mb-7">
-          <h1 className="text-3xl font-bold text-gray-900">Pesanan</h1>
+    <div className="flex flex-col lg:flex-row min-h-screen font-poppins relative overflow-x-hidden">
+
+      {/* =========================================
+          SISI KIRI: KATALOG MENU
+          ========================================= */}
+      <div className={`flex-1 flex flex-col bg-white relative pb-32 lg:pb-8 lg:min-h-screen ${activeScreen === "cart" ? "hidden lg:flex" : "flex"}`}>
+
+        <div className="mb-4">
+          <h1 className="text-2xl font-semibold text-gray-900">Pesanan</h1>
         </div>
 
-        {/* Error Notice */}
-        {error && (
-          <div className="mb-6 px-4 py-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600 font-medium">
-            ⚠️ {error}
-          </div>
-        )}
-
-        {/* Grid Container */}
-        {loading ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <SkeletonCard key={i} />
-            ))}
-          </div>
+        {isLoadingMenus ? (
+          <div className="flex justify-center py-20"><IconLoader2 className="animate-spin text-orange-500 w-10 h-10" /></div>
+        ) : error ? (
+          <div className="text-center text-red-500 py-10">Gagal memuat menu.</div>
         ) : menus.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-gray-100 border-dashed mt-4">
-            <span className="text-6xl mb-4 grayscale opacity-40">🍦</span>
-            <p className="font-semibold text-gray-500">Menu belum tersedia</p>
-          </div>
+          <div className="text-center text-gray-500 py-10">Belum ada data menu.</div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
-            {menus.map((item) => (
-              <MenuCard key={item.id} item={item} onAdd={handleAddToCart} />
-            ))}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-4 overflow-x-auto py-2">
+            {menus.map((menu) => {
+              const currentQty = cart.find((item) => item.id === menu.id)?.qty || 0;
+              return (
+                <div
+                  key={menu.id}
+                  onClick={() => handleItemClick(menu)}
+                  className="bg-orange-100 rounded-[16px] min-w-42 min-h-57 p-2 flex flex-col items-center cursor-pointer hover:shadow-md transition-all active:scale-95 relative select-none"
+                >
+                  {currentQty > 0 && (
+                    <div className="absolute -top-2 -right-2 bg-orange-500 text-white font-bold text-xs w-7 h-7 flex items-center justify-center rounded-full shadow-md z-10 border-2 border-white animate-in zoom-in duration-200">
+                      {currentQty}
+                    </div>
+                  )}
+                  <div className="w-full aspect-square bg-white rounded-[8px] mb-3 flex items-center justify-center overflow-hidden relative shadow-sm">
+                    {menu.photo ? (
+                      <Image src={menu.photo} alt={menu.name} fill sizes="50vw" className="object-cover bg-white" />
+                    ) : (
+                      <span className="text-xs text-gray-400">No Image</span>
+                    )}
+                  </div>
+                  <h3 className="font-bold text-gray-900 text-sm text-center mb-0.5 line-clamp-1">{menu.name}</h3>
+                  <p className="font-bold text-orange-500 text-[13px] text-center">Rp.{menu.price.toLocaleString("id-ID")}</p>
+                </div>
+              );
+            })}
           </div>
         )}
-      </div>
 
-      {/* ── Cart Bar (Floating di bawah layar) ── */}
-      {totalItems > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 md:left-64 z-40 px-4 md:px-8 pb-6 pt-4 bg-gradient-to-t from-gray-50 via-gray-50/90 to-transparent pointer-events-none">
-          <div className="max-w-6xl mx-auto flex justify-end pointer-events-auto">
-            <button className="flex items-center gap-6 bg-[#FF8C42] hover:bg-orange-500 active:scale-[0.98] transition-all text-white rounded-2xl px-6 py-4 shadow-xl shadow-orange-500/20">
-              <div className="flex items-center gap-3">
-                <div className="bg-white/20 p-2 rounded-lg">
-                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                </div>
-                <div className="text-left">
-                  <p className="text-xs font-medium text-orange-100 uppercase tracking-wider">Keranjang</p>
-                  <p className="font-bold text-lg leading-none">{totalItems} Item</p>
-                </div>
+        <div className={`lg:hidden fixed bottom-0 left-0 right-0 w-full z-40 transition-transform duration-300 ease-in-out blur-out-xs ${totalItems > 0 ? "translate-y-0" : "translate-y-full"}`}>
+          <div className="bg-neutral-50 rounded-t-[32px] pt-4 pb-6 px-5 shadow-[0_-15px_40px_rgba(0,0,0,0.08)] border-t border-gray-300">
+            <button
+              onClick={() => setActiveScreen("cart")}
+              className="w-full bg-orange-500 hover:bg-orange-700 active:scale-[0.98] transition-all text-white rounded-2xl p-4 px-5 flex items-center justify-between shadow-lg shadow-orange-500/20"
+            >
+              <div className="flex flex-col text-left text-white">
+                <span className="font-semibold text-[20px] leading-tight">{totalItems} Item</span>
+                <span className="text-base">Masuk ke dalam list order</span>
               </div>
-              <div className="h-10 w-[1px] bg-white/20 mx-2"></div>
-              <span className="font-extrabold text-xl">{formatRupiah(totalPrice)}</span>
-              <svg className="w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-              </svg>
+              <IconReceipt className="w-8 h-8 text-white" stroke={2} />
             </button>
           </div>
         </div>
-      )}
+      </div>
 
-      {/* ── Toast Notification ── */}
-      {showToast && (
-        <div className="fixed top-8 left-1/2 md:left-[calc(50%+8rem)] -translate-x-1/2 z-50 pointer-events-none transition-all">
-          <div className="bg-gray-900/90 backdrop-blur-sm text-white text-sm font-semibold px-6 py-3 rounded-full shadow-2xl flex items-center gap-3">
-            <span className="bg-green-500 rounded-full p-1">
-              <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-            </span>
-            Ditambahkan ke keranjang
+      {/* =========================================
+          SISI KANAN: KERANJANG (CART)
+          ========================================= */}
+      <div className={`w-full lg:w-[400px] xl:w-[450px] flex flex-col lg:shadow-[-10px_0_30px_rgba(0,0,0,0.03)] lg:h-screen lg:sticky lg:top-0 ${activeScreen === "catalog" ? "hidden lg:flex" : "flex"}`}>
+
+        <header className="flex lg:hidden items-center pb-4 sticky top-0 z-10 bg-white">
+          <button
+            onClick={() => setActiveScreen("catalog")}
+            className="p-2 -ml-2 rounded-full hover:bg-gray-200 transition-colors"
+          >
+            <IconArrowNarrowLeft className="w-6 h-6 text-gray-900" stroke={2.5} />
+          </button>
+          <h1 className="text-2xl font-semibold text-gray-900 ml-2">Order</h1>
+        </header>
+
+        <div className="hidden lg:block py-6 border-b border-gray-200 bg-white">
+          <h2 className="text-2xl font-semibold text-gray-900">Order</h2>
+        </div>
+
+        {/* LIST ITEM KERANJANG */}
+        <div className="flex-1 overflow-y-auto py-4 gap-4 flex flex-col pb-[320px] lg:pb-4">
+          {cart.length === 0 && (
+            <div className="m-auto text-center text-gray-400 flex flex-col items-center gap-2">
+              <IconReceipt className="w-12 h-12 opacity-50" />
+              <p>Keranjang masih kosong</p>
+            </div>
+          )}
+          {cart.map((item) => (
+            <div key={item.id} className="flex items-center bg-orange-100 rounded-[16px] min-h-25 p-2 shadow-sm">
+              <div className="w-21 h-21 bg-white rounded-[8px] flex shrink-0 items-center justify-center overflow-hidden relative">
+                {item.photo ? (
+                  <Image src={item.photo} alt={item.name} fill sizes="84px" className="object-cover" />
+                ) : (
+                  <span className="text-[10px] text-gray-400">Img</span>
+                )}
+              </div>
+              <div className="flex flex-col ml-3 flex-1">
+                <span className="font-semibold text-black text-[16px] line-clamp-1">{item.name}</span>
+                <span className="font-semibold text-orange-500 text-sm mt-0.5">Rp.{item.price.toLocaleString("id-ID")}</span>
+              </div>
+
+              {/* Pill Kuantitas Putih */}
+              <div className="flex items-center bg-neutral-50 backdrop-blur-sm rounded-[8px] border border-white p-1 px-2 shrink-0 shadow-sm">
+                <button onClick={() => updateQty(item.id, -1)} className="w-6 h-6 flex items-center justify-center text-gray-900 hover:bg-gray-100 rounded-full transition-colors">-</button>
+                <span className="w-6 text-center text-gray-900 text-[15px]">{item.qty}</span>
+                <button onClick={() => updateQty(item.id, 1)} className="w-6 h-6 flex items-center justify-center text-gray-900 hover:bg-gray-100 rounded-full transition-colors">+</button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* AREA TOTAL & AKSI BAWAH */}
+        <div className="fixed lg:static bottom-0 left-0 right-0 bg-white lg:bg-gray-50 rounded-t-[32px] lg:rounded-none shadow-[0_-15px_40px_rgba(0,0,0,0.06)] lg:shadow-none border-t border-gray-100 px-5 pt-5 pb-8 lg:py-6 flex flex-col gap-4 z-20 mt-auto">
+
+          {/* INPUT VOUCHER */}
+          <div className="flex items-center w-full bg-white border border-gray-900 rounded-[20px] p-1.5 overflow-hidden h-[60px] shadow-sm">
+            <div className="flex items-center justify-center w-12 shrink-0">
+              <IconTicket className="w-6 h-6 text-gray-900" stroke={1.5} />
+            </div>
+
+            {appliedVoucher ? (
+              <div className="flex items-center justify-between flex-1 pr-2">
+
+                {/* --- DESAIN TIKET DISKON BARU --- */}
+                <div className="relative flex items-center gap-2 bg-linear-to-r from-orange-300 to-orange-100 px-4 py-1.5 rounded-lg overflow-visible min-h-10">
+                  {/* Lubang Kiri (Ilusi) */}
+                  <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full"></div>
+                  {/* Lubang Kanan (Ilusi) */}
+                  <div className="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full"></div>
+
+                  {/* Teks Diskon */}
+                  <span className="text-[#FF7A00] font-bold text-sm relative z-10">
+                    -Rp{discount.toLocaleString("id-ID")}
+                  </span>
+
+                  {/* Tombol Hapus (X) */}
+                  <button onClick={handleRemoveVoucher} className="hover:text-red-600 transition-colors relative z-10 ml-1">
+                    <IconX className="w-4 h-4 text-[#FF7A00]" stroke={3} />
+                  </button>
+                </div>
+                {/* -------------------------------- */}
+
+                <span className="text-xs text-gray-500 font-medium">Dipakai</span>
+              </div>
+            ) : (
+              <>
+                <Input
+                  value={voucherInput}
+                  onChange={(e) => setVoucherInput(e.target.value)}
+                  placeholder="KETIK KODE VOUCHER"
+                  className="flex-1 border-none shadow-none focus-visible:ring-0 p-0 text-gray-900 placeholder:text-gray-400 font-bold text-[13px] uppercase"
+                />
+                <Button
+                  onClick={handleApplyVoucher}
+                  className={`bg-gray-900 hover:bg-gray-800 text-white rounded-xl h-full px-4 font-bold transition-colors ${(!voucherInput.trim()) ? "opacity-0 hidden cursor-not-allowed" : "opacity-100 block"}`}
+                >
+                  {isCheckingVoucher ? <IconLoader2 className="animate-spin w-5 h-5" /> : "Gunakan"}
+                </Button>
+              </>
+            )}
+          </div>
+
+          {/* METODE PEMBAYARAN */}
+          <button onClick={() => setIsPaymentSheetOpen(true)} className="flex items-center justify-between w-full bg-white border border-gray-900 rounded-[20px] px-5 py-3 h-[60px] hover:bg-gray-50 transition-colors shadow-sm">
+            <div className="flex items-center gap-3">
+              {paymentMethod === "QRIS" ? <IconQrcode className="w-6 h-6 text-gray-900" stroke={1.5} /> : <IconCashBanknote className="w-6 h-6 text-gray-900" stroke={1.5} />}
+              <span className="font-bold text-gray-900 text-[15px]">{paymentMethod}</span>
+            </div>
+            <IconChevronRight className="w-5 h-5 text-gray-500" stroke={2} />
+          </button>
+
+          {/* TOTAL & SIMPAN */}
+          <div className="flex items-center justify-between mt-3 gap-3">
+            <div className="flex flex-col">
+              <span className="text-neutral-950 text-base">Total</span>
+              <span className="text-[20px] font-semibold text-neutral-950 -mt-1 tracking-tight">Rp.{grandTotal.toLocaleString("id-ID")}</span>
+            </div>
+            <Button
+              onClick={handleSaveOrder}
+              disabled={isSaving || cart.length === 0}
+              className="bg-orange-500 hover:bg-orange-700 text-neutral-50 rounded-2xl h-full py-3 px-4 shadow-md font-semibold disabled:opacity-70 text-[14px]"
+            >
+              {isSaving ? <IconLoader2 className="w-6 h-6 mr-2 animate-spin" stroke={2.5} /> : <IconDeviceFloppy className="w-6 h-6 mr-2" stroke={2.5} />}
+              {isSaving ? "Proses..." : "Simpan Penjualan"}
+            </Button>
           </div>
         </div>
+      </div>
+
+      {/* =========================================
+          SHEET METODE PEMBAYARAN & TOAST
+          ========================================= */}
+
+      <Sheet open={isPaymentSheetOpen} onOpenChange={setIsPaymentSheetOpen}>
+        <SheetContent side="bottom" className="rounded-t-[32px] p-6 bg-white border-none pb-10">
+          <SheetHeader className="mb-6 border-b border-gray-100 pb-4">
+            <SheetTitle className="text-xl font-bold text-gray-900 text-left">Metode Pembayaran</SheetTitle>
+          </SheetHeader>
+          <div className="flex flex-col gap-3">
+            <button onClick={() => { setPaymentMethod("Cash"); setIsPaymentSheetOpen(false); }} className={`flex items-center justify-between w-full border ${paymentMethod === "Cash" ? "border-orange-500 bg-orange-100" : "border-gray-200 bg-white"} rounded-2xl px-5 py-4 hover:bg-gray-50 transition-colors`}>
+              <div className="flex items-center gap-3"><IconCashBanknote className="w-6 h-6 text-gray-900" stroke={1.5} /><span className="font-bold text-gray-900">Cash</span></div>
+              <IconChevronRight className="w-5 h-5 text-gray-400" stroke={2} />
+            </button>
+            <button onClick={() => { setPaymentMethod("QRIS"); setIsPaymentSheetOpen(false); }} className={`flex items-center justify-between w-full border ${paymentMethod === "QRIS" ? "border-orange-500 bg-orange-100" : "border-gray-200 bg-white"} rounded-2xl px-5 py-4 hover:bg-gray-50 transition-colors`}>
+              <div className="flex items-center gap-3"><IconQrcode className="w-6 h-6 text-gray-900" stroke={1.5} /><span className="font-bold text-gray-900">QRIS</span></div>
+              <IconChevronRight className="w-5 h-5 text-gray-400" stroke={2} />
+            </button>
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* CUSTOM TOAST NOTIFICATION */}
+      {toast.show && (
+        <div className={`fixed bottom-6 right-6 z-[100] flex items-center gap-3 px-5 py-4 rounded-2xl shadow-2xl transition-all duration-300 animate-in slide-in-from-right-8 ${toast.type === "success" ? "bg-[#ECFDF5] text-[#059669] border border-[#A7F3D0]" : "bg-[#FEF2F2] text-[#DC2626] border border-[#FECACA]"
+          }`}>
+          {toast.type === "success" ? <IconCheck className="w-6 h-6" stroke={2.5} /> : <IconX className="w-6 h-6" stroke={2.5} />}
+          <span className="font-bold text-sm">{toast.message}</span>
+        </div>
       )}
-    </main>
+
+    </div>
   );
 }
