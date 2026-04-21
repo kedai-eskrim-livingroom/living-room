@@ -333,7 +333,7 @@ export default function POSPage() {
             <SheetTitle className="text-xl font-bold text-gray-900 text-left">Metode Pembayaran</SheetTitle>
           </SheetHeader>
           <div className="flex flex-col gap-3">
-            <button onClick={() => { setPaymentMethod("Cash"); setIsPaymentSheetOpen(false); }} className={`flex items-center justify-between w-full border ${paymentMethod === "Cash" ? "border-orange-500 bg-orange-100" : "border-gray-200 bg-white"} rounded-2xl px-5 py-4 hover:bg-gray-50 transition-colors`}>
+            <button onClick={() => { setPaymentMethod("Cash"); setIsPaymentSheetOpen(false); }} className={`flex items-center justify-between w-full border ${paymentMethod === "CASH" ? "border-orange-500 bg-orange-100" : "border-gray-200 bg-white"} rounded-2xl px-5 py-4 hover:bg-gray-50 transition-colors`}>
               <div className="flex items-center gap-3"><IconCashBanknote className="w-6 h-6 text-gray-900" stroke={1.5} /><span className="font-bold text-gray-900">Cash</span></div>
               <IconChevronRight className="w-5 h-5 text-gray-400" stroke={2} />
             </button>
