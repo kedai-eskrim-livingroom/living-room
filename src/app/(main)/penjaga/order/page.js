@@ -175,7 +175,7 @@ export default function POSPage() {
                 <div
                   key={menu.id}
                   onClick={() => handleItemClick(menu)}
-                  className="bg-orange-100 rounded-[16px] w-42 h-57 p-2 flex flex-col items-center cursor-pointer hover:shadow-md transition-all active:scale-95 relative select-none"
+                  className="bg-orange-100 rounded-[16px] w-40 h-57 p-2 flex flex-col items-center cursor-pointer hover:shadow-md transition-all active:scale-95 relative select-none"
                 >
                   {currentQty > 0 && (
                     <div className="absolute -top-2 -right-2 bg-orange-500 text-white font-bold text-xs w-7 h-7 flex items-center justify-center rounded-full shadow-md z-10 border-2 border-white animate-in zoom-in duration-200">
