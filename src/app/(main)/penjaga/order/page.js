@@ -168,7 +168,7 @@ export default function POSPage() {
         ) : menus.length === 0 ? (
           <div className="text-center text-neutral-500 py-10">Belum ada data menu.</div>
         ) : (
-          <div className="flex flex-wrap justify-center gap-4 overflow-x-auto py-2">
+          <div className="flex flex-wrap justify-center gap-2 overflow-x-auto py-2">
             {menus.map((menu) => {
               const currentQty = cart.find((item) => item.id === menu.id)?.qty || 0;
               return (
