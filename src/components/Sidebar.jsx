@@ -4,22 +4,22 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { 
-  LayoutGrid, 
-  History, 
-  Utensils, 
-  Ticket, 
-  LogOut 
-} from "lucide-react";
+  IconLayoutDashboard, 
+  IconHistory, 
+  IconToolsKitchen2, 
+  IconTicket, 
+  IconLogout 
+} from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { logoutUser } from "@/utils/auth";
 
 
 // Daftar menu navigasi sesuai desain
 const menuItems = [
-  { name: "Pesanan", href: "/admin/dashboard", icon: LayoutGrid },
-  { name: "Riwayat", href: "/admin/history", icon: History },
-  { name: "Menu", href: "/admin/menu", icon: Utensils },
-  { name: "Voucher", href: "/admin/voucher", icon: Ticket },
+  { name: "Pesanan", href: "/admin/dashboard", icon: IconLayoutDashboard },
+  { name: "Riwayat", href: "/admin/history", icon: IconHistory },
+  { name: "Menu", href: "/admin/menu", icon: IconToolsKitchen2 },
+  { name: "Voucher", href: "/admin/voucher", icon: IconTicket },
 ];
 
 export default function SidebarContent() {
@@ -47,7 +47,7 @@ export default function SidebarContent() {
       </div>
 
       {/* 2. Menu Navigasi */}
-      <nav className="flex-1 space-y-2">
+      <nav className="flex-1 flex flex-col">
         {menuItems.map((item) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
@@ -55,10 +55,10 @@ export default function SidebarContent() {
           return (
             <Link key={item.name} href={item.href} passHref>
               <div
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-lg font-semibold ${
+                className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors text-lg font-semibold ${
                   isActive
-                    ? "bg-linear-to-br from-orange-500 to-orange-200 text-white shadow-sm" 
-                    : "text-gray-800 hover:bg-orange-50 hover:text-orange-500"
+                    ? "bg-linear-to-br from-orange-500 to-orange-200 text-white" 
+                    : "text-neutral-950 hover:bg-orange-50 hover:text-orange-500"
                 }`}
               >
                 <Icon className="w-5 h-5" />
@@ -75,7 +75,7 @@ export default function SidebarContent() {
           onClick={handleLogout}
           className="w-full bg-[#FF7A00] hover:bg-[#E56E00] text-white flex items-center justify-center gap-2 py-6 rounded-lg font-semibold shadow-sm"
         >
-          <LogOut className="w-5 h-5" />
+          <IconLogout className="w-5 h-5" />
           Keluar
         </Button>
       </div>

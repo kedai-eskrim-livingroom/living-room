@@ -55,7 +55,7 @@ export default function DateRangeModal({
 
         {/* Area Kalender */}
         <div className="flex-1 overflow-y-auto px-6 no-scrollbar pb-6 md:pb-0">
-          <div className="bg-[#FFF5EC] border border-[#FF7A00] rounded-3xl flex justify-center w-full">
+          <div className="bg-orange-100 border border-orange-500 rounded-2xl flex justify-center w-full p-1">
             <Calendar
               initialFocus
               mode="range"
