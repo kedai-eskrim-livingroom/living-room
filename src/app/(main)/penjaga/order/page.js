@@ -218,7 +218,7 @@ export default function POSPage() {
           ========================================= */}
       <div className={`w-full lg:w-[400px] xl:w-[450px] flex flex-col lg:h-screen lg:sticky lg:top-0 relative pb-2 ${activeScreen === "catalog" ? "hidden lg:flex" : "flex"}`}>
 
-        <header className="flex lg:hidden items-center pb-4 sticky top-0 z-10 bg-white ">
+        <header className="flex lg:hidden items-center pb-4 bg-white ">
           <button
             onClick={() => setActiveScreen("catalog")}
             className="p-2 -ml-2 rounded-full hover:bg-neutral-200 transition-colors"
