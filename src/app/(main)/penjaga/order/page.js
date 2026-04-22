@@ -145,7 +145,24 @@ export default function POSPage() {
         </div>
 
         {isLoadingMenus ? (
-          <div className="flex justify-center py-20"><IconLoader2 className="animate-spin text-orange-500 w-10 h-10" /></div>
+          // SKELETON LOADING
+          <div className="flex flex-wrap justify-center gap-4 overflow-x-auto py-2">
+            {[...Array(8)].map((_, index) => (
+              <div
+                key={index}
+                className="bg-orange-50/70 rounded-[16px] w-42 h-57 p-2 flex flex-col items-center animate-pulse"
+              >
+                {/* Skeleton Kotak Gambar */}
+                <div className="w-full aspect-square bg-neutral-200/70 rounded-[8px] mb-3"></div>
+
+                {/* Skeleton Teks Judul */}
+                <div className="h-3.5 bg-neutral-200/70 rounded-full w-3/4 mb-2.5 mt-1"></div>
+
+                {/* Skeleton Teks Harga */}
+                <div className="h-3 bg-orange-200/70 rounded-full w-1/2"></div>
+              </div>
+            ))}
+          </div>
         ) : error ? (
           <div className="text-center text-red-500 py-10">Gagal memuat menu.</div>
         ) : menus.length === 0 ? (
