@@ -239,9 +239,9 @@ export default function POSPage() {
 
               {/* Pill Kuantitas Putih */}
               <div className="flex items-center bg-neutral-50 backdrop-blur-sm rounded-[8px] border border-white p-1 px-2 shrink-0 shadow-sm">
-                <button onClick={() => updateQty(item.id, -1)} className="w-6 h-6 flex items-center justify-center text-neutral-950 hover:bg-neutral-100 rounded-full transition-colors">-</button>
+                <button onClick={() => updateQty(item.id, -1)} className="w-6 h-6 flex items-center justify-center text-neutral-950 hover:bg-neutral-100 rounded-full transition-colors cursor-pointer">-</button>
                 <span className="w-6 text-center text-neutral-950 text-[15px]">{item.qty}</span>
-                <button onClick={() => updateQty(item.id, 1)} className="w-6 h-6 flex items-center justify-center text-neutral-950 hover:bg-neutral-100 rounded-full transition-colors">+</button>
+                <button onClick={() => updateQty(item.id, 1)} className="w-6 h-6 flex items-center justify-center text-neutral-950 hover:bg-neutral-100 rounded-full transition-colors cursor-pointer">+</button>
               </div>
             </div>
           ))}
