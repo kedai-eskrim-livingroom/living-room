@@ -146,11 +146,11 @@ export default function POSPage() {
 
         {isLoadingMenus ? (
           // SKELETON LOADING
-          <div className="flex flex-wrap justify-center gap-4 overflow-x-auto py-2">
+          <div className="flex flex-wrap justify-center gap-2 overflow-x-auto py-2">
             {[...Array(8)].map((_, index) => (
               <div
                 key={index}
-                className="bg-orange-50/70 rounded-[16px] w-42 h-57 p-2 flex flex-col items-center animate-pulse"
+                className="bg-orange-50/70 rounded-[16px] w-40 h-57 p-2 flex flex-col items-center animate-pulse"
               >
                 {/* Skeleton Kotak Gambar */}
                 <div className="w-full aspect-square bg-neutral-200/70 rounded-[8px] mb-3"></div>
