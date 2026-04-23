@@ -11,6 +11,7 @@ import {
   IconChevronLeft,
   IconChevronRight
 } from "@tabler/icons-react";
+import DateRangeModal from "@/components/DateRangeModal";
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 function formatRupiah(amount) {
@@ -41,108 +42,7 @@ function toISO(date) {
   return `${y}-${m}-${d}`;
 }
 
-// ─── Mini Calendar & Modals ──────────────────────────────────────────────────
-const DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
-const MONTHS = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
-];
 
-function MiniCalendar({ year, month, rangeStart, rangeEnd, onSelect }) {
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const cells = [];
-  for (let i = 0; i < firstDay; i++) cells.push(null);
-  for (let d = 1; d <= daysInMonth; d++) cells.push(d);
-
-  return (
-    <div>
-      <div className="grid grid-cols-7 mb-1">
-        {DAYS.map((d) => (
-          <div key={d} className="text-center text-[10px] font-semibold text-gray-400 py-1">{d}</div>
-        ))}
-      </div>
-      <div className="grid grid-cols-7 gap-y-1">
-        {cells.map((d, i) => {
-          if (!d) return <div key={i} />;
-          const date = new Date(year, month, d);
-          const isStart = rangeStart && toISO(rangeStart) === toISO(date);
-          const isEnd = rangeEnd && toISO(rangeEnd) === toISO(date);
-          const inRange = rangeStart && rangeEnd && date > rangeStart && date < rangeEnd;
-          const active = isStart || isEnd;
-          return (
-            <button key={i} onClick={() => onSelect(date)}
-              className={[
-                "text-xs h-8 w-full rounded-lg transition-colors font-medium",
-                active ? "bg-[#FF8C42] text-white font-bold shadow" : "",
-                inRange && !active ? "bg-orange-100 text-orange-800" : "",
-                !active && !inRange ? "hover:bg-orange-50 text-gray-700" : "",
-              ].join(" ")}
-            >{d}</button>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function DatePickerModal({ onClose, onSet }) {
-  const today = new Date();
-  const [viewYear1, setViewYear1] = useState(today.getFullYear());
-  const [viewMonth1, setViewMonth1] = useState(today.getMonth());
-  const [rangeStart, setRangeStart] = useState(null);
-  const [rangeEnd, setRangeEnd] = useState(null);
-
-  const viewYear2 = viewMonth1 === 11 ? viewYear1 + 1 : viewYear1;
-  const viewMonth2 = viewMonth1 === 11 ? 0 : viewMonth1 + 1;
-
-  const handleSelect = (date) => {
-    if (!rangeStart || (rangeStart && rangeEnd)) { setRangeStart(date); setRangeEnd(null); }
-    else {
-      if (date < rangeStart) { setRangeEnd(rangeStart); setRangeStart(date); }
-      else setRangeEnd(date);
-    }
-  };
-
-  const prevMonth = () => { if (viewMonth1 === 0) { setViewMonth1(11); setViewYear1(viewYear1 - 1); } else setViewMonth1(viewMonth1 - 1); };
-  const nextMonth = () => { if (viewMonth1 === 11) { setViewMonth1(0); setViewYear1(viewYear1 + 1); } else setViewMonth1(viewMonth1 + 1); };
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6" style={{ animation: "slideUp 0.2s ease-out" }}>
-        <div className="flex items-center justify-between mb-5">
-          <h3 className="font-bold text-gray-900 text-lg">Pilih Tanggal</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
-            <IconX size={20} stroke={2} />
-          </button>
-        </div>
-        <div className="mb-5">
-          <div className="flex items-center justify-between mb-3">
-            <button onClick={prevMonth} className="text-[#FF8C42] w-8 h-8 flex items-center justify-center rounded-lg hover:bg-orange-50 transition-colors">
-              <IconChevronLeft size={20} stroke={2.5} />
-            </button>
-            <span className="font-semibold text-gray-800">{MONTHS[viewMonth1]} {viewYear1}</span>
-            <button onClick={nextMonth} className="text-[#FF8C42] w-8 h-8 flex items-center justify-center rounded-lg hover:bg-orange-50 transition-colors">
-              <IconChevronRight size={20} stroke={2.5} />
-            </button>
-          </div>
-          <MiniCalendar year={viewYear1} month={viewMonth1} rangeStart={rangeStart} rangeEnd={rangeEnd} onSelect={handleSelect} />
-        </div>
-        <div className="mb-6">
-          <div className="flex items-center justify-center mb-3">
-            <span className="font-semibold text-gray-800">{MONTHS[viewMonth2]} {viewYear2}</span>
-          </div>
-          <MiniCalendar year={viewYear2} month={viewMonth2} rangeStart={rangeStart} rangeEnd={rangeEnd} onSelect={handleSelect} />
-        </div>
-        <button
-          onClick={() => { if (rangeStart) onSet(rangeStart, rangeEnd); }}
-          disabled={!rangeStart}
-          className="w-full bg-[#FF8C42] hover:bg-orange-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition-colors"
-        >Set Tanggal</button>
-      </div>
-    </div>
-  );
-}
 
 // ─── Growth Chart (Dinamis) ────────────────────────────────────────────────────
 function GrowthChart({ data }) {
@@ -244,7 +144,6 @@ const PERIODS = ["Minggu", "1 Bulan", "3 Bulan", "6 Bulan"];
 
 export default function Dashboard() {
   const [activePeriod, setActivePeriod] = useState("Minggu");
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const [dateRange, setDateRange] = useState({ start: null, end: null });
   const [dashData, setDashData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -272,10 +171,12 @@ export default function Dashboard() {
     setDateRange({ start: null, end: null });
   }, [activePeriod]);
 
-  const handleDateSet = (start, end) => {
-    setDateRange({ start, end });
-    setShowDatePicker(false);
-    fetchData(start ? toISO(start) : undefined, end ? toISO(end) : undefined);
+  const handleDateSet = async (startStr, endStr) => {
+    setDateRange({ 
+      start: startStr ? new Date(startStr) : null, 
+      end: endStr ? new Date(endStr) : null 
+    });
+    await fetchData(startStr, endStr);
   };
 
   const d = dashData || {};
@@ -285,26 +186,12 @@ export default function Dashboard() {
 
   return (
     <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-        * { font-family: 'Inter', sans-serif; }
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(12px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slideUp {
-          from { opacity: 0; transform: translateY(20px) scale(0.98); }
-          to   { opacity: 1; transform: translateY(0) scale(1); }
-        }
-      `}</style>
+      <div className="flex flex-col gap-6 max-w-2xl mx-auto pb-10">
 
-      <main className="w-full bg-white min-h-screen p-4 md:p-8">
-        <div className="max-w-xl mx-auto">
-
-          <h1 className="text-3xl font-extrabold text-gray-900 mb-6">Dashboard</h1>
+          <h1 className="text-2xl font-extrabold text-black mt-2">Dashboard</h1>
 
           {/* Period Buttons */}
-          <div className="flex gap-2 mb-6">
+          <div className="flex gap-2">
             {PERIODS.map((p) => (
               <button
                 key={p}
@@ -320,15 +207,21 @@ export default function Dashboard() {
           </div>
 
           {/* Date Input */}
-          <button
-            onClick={() => setShowDatePicker(true)}
-            className="flex items-center gap-2 w-full px-4 py-2 bg-white border border-neutral-300 rounded-lg text-sm text-neutral-400 transition-colors mb-6 text-left font-medium hover:border-orange-500"
-          >
-            <span className="text-neutral-400"><IconCalendarWeek size={20} stroke={2} /></span>
-            {dateRange.start
-              ? `${formatDateLabel(dateRange.start)}${dateRange.end ? " – " + formatDateLabel(dateRange.end) : ""}`
-              : "Pilih tanggal"}
-          </button>
+          <DateRangeModal
+            title="Pilih Rentang Tanggal"
+            actionLabel="Tampilkan Data"
+            onAction={handleDateSet}
+            triggerNode={
+              <button
+                className="flex items-center gap-2 w-full px-4 py-2 bg-white border border-neutral-300 rounded-lg text-sm text-neutral-400 transition-colors text-left font-medium hover:border-orange-500"
+              >
+                <span className="text-neutral-400"><IconCalendarWeek size={20} stroke={2} /></span>
+                {dateRange.start
+                  ? `${formatDateLabel(dateRange.start)}${dateRange.end ? " – " + formatDateLabel(dateRange.end) : ""}`
+                  : "Pilih tanggal kustom"}
+              </button>
+            }
+          />
 
           {loading ? <Skeleton /> : (
             <div style={{ animation: "fadeUp 0.35s ease-out" }}>
@@ -396,12 +289,9 @@ export default function Dashboard() {
 
             </div>
           )}
-        </div>
-      </main>
+      </div>
 
-      {showDatePicker && (
-        <DatePickerModal onClose={() => setShowDatePicker(false)} onSet={handleDateSet} />
-      )}
+
     </>
   );
 }
