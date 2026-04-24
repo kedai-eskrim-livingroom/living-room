@@ -13,7 +13,7 @@ import {
     IconCash,
     IconLoader2,
     IconFileExport,
-    IconBusinessplan
+    IconWallet
 } from '@tabler/icons-react';
 
 import DateRangeModal from "@/components/DateRangeModal";
@@ -80,7 +80,7 @@ export default function RiwayatAdminPage() {
                     iconBorderColor="border-orange-300"
                 />
                 <StatCard
-                    icon={<IconBusinessplan size={28} stroke={2} />}
+                    icon={<IconWallet size={28} stroke={2} />}
                     label="Total Pendapatan"
                     value={isLoading ? "..." : `Rp ${summary.totalRevenue.toLocaleString("id-ID")}`}
                     from="from-emerald-300/50" to="to-emerald-100"
