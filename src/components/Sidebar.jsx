@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -14,30 +15,55 @@ import { Button } from "@/components/ui/button";
 import { getUser, logoutUser } from "@/services/auth";
 
 export default function SidebarContent() {
-  // Mengambil URL saat ini untuk efek menu aktif
   const pathname = usePathname();
-  const user = getUser();
-  // Daftar menu navigasi sesuai desain
-const menuItemsKasir = [
-  { name: "Pesanan", href: "/penjaga/order", icon: IconLayoutDashboard },
-  { name: "Riwayat", href: "/penjaga/history", icon: IconHistory },
-];
-const menuItemsAdmin = [
-  { name: "Dashboard", href: "/admin/dashboard", icon: IconLayoutDashboard },
-  { name: "Riwayat", href: "/admin/history", icon: IconHistory },
-  { name: "Menu", href: "/admin/menu", icon: IconToolsKitchen2 },
-  { name: "Voucher", href: "/admin/voucher", icon: IconTicket },
-];
+  
+  // 1. Tambahkan state untuk mendeteksi apakah komponen sudah di-mount di browser
+  const [isMounted, setIsMounted] = useState(false);
+  const [user, setUser] = useState(null);
+
+  // 2. Gunakan useEffect untuk mengambil data user hanya di sisi client (browser)
+  useEffect(() => {
+    setUser(getUser());
+    setIsMounted(true);
+  }, []);
+
+  const menuItemsKasir = [
+    { name: "Pesanan", href: "/penjaga/order", icon: IconLayoutDashboard },
+    { name: "Riwayat", href: "/penjaga/history", icon: IconHistory },
+  ];
+
+  const menuItemsAdmin = [
+    { name: "Dashboard", href: "/admin/dashboard", icon: IconLayoutDashboard },
+    { name: "Riwayat", href: "/admin/history", icon: IconHistory },
+    { name: "Menu", href: "/admin/menu", icon: IconToolsKitchen2 },
+    { name: "Voucher", href: "/admin/voucher", icon: IconTicket },
+  ];
+
   const handleLogout = () => {
-    logoutUser(); // Menghapus cookie token
-    window.location.href = "/"; // Redirect ke halaman login
+    logoutUser(); 
+    window.location.href = "/"; 
   };
+
+  // 3. Mencegah Hydration Mismatch: Jangan render struktur menu sebelum mounted
+  if (!isMounted) {
+    return (
+      <div className="flex flex-col h-full bg-white px-4 py-6">
+        <div className="w-full h-fit">
+          <Image src="/logo.png" alt="Living Room Logo" width={200} height={50} className="object-contain" priority />
+        </div>
+        {/* Tampilkan area kosong/skeleton sementara agar server dan client sama */}
+        <nav className="flex-1 flex flex-col mt-6"></nav>
+      </div>
+    );
+  }
+
+  // Pilih menu berdasarkan role user yang sudah didapatkan
+  const activeMenu = user?.role === "PENJAGA" ? menuItemsKasir : menuItemsAdmin;
 
   return (
     <div className="flex flex-col h-full bg-white px-4 py-6">
       {/* 1. Area Logo */}
       <div className="w-full h-fit">
-        {/* Pastikan file logo.png ada di folder public/ */}
         <Image 
           src="/logo.png" 
           alt="Living Room Logo" 
@@ -49,36 +75,18 @@ const menuItemsAdmin = [
       </div>
 
       {/* 2. Menu Navigasi */}
-      <nav className="flex-1 flex flex-col">
-        {user?.role == "PENJAGA"
-          ? menuItemsKasir.map((item) => {
-              const isActive = pathname === item.href;
-              const Icon = item.icon;
-
-          return (
-            <Link key={item.name} href={item.href} passHref>
-              <div
-                className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors text-lg font-semibold ${
-                  isActive
-                    ? "bg-linear-to-br from-orange-500 to-orange-200 text-white" 
-                    : "text-neutral-950 hover:bg-orange-50 hover:text-orange-500"
-                }`}
-              >
-                <Icon className="w-5 h-5" />
-                {item.name}
-              </div>
-            </Link>
-          );
-        }) : menuItemsAdmin.map((item) => {
+      {/* (Saya merapikan logikanya agar tidak menulis kode mapping 2x) */}
+      <nav className="flex-1 flex flex-col mt-6 gap-1">
+        {activeMenu.map((item) => {
           const isActive = pathname === item.href;
-              const Icon = item.icon;
+          const Icon = item.icon;
 
           return (
             <Link key={item.name} href={item.href} passHref>
               <div
                 className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors text-lg font-semibold ${
                   isActive
-                    ? "bg-linear-to-br from-orange-500 to-orange-200 text-white" 
+                    ? "bg-gradient-to-br from-orange-500 to-orange-200 text-white" // <-- Catatan: Saya ubah bg-linear-to-br jadi bg-gradient-to-br
                     : "text-neutral-950 hover:bg-orange-50 hover:text-orange-500"
                 }`}
               >
