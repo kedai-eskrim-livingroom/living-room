@@ -150,7 +150,7 @@ export default function POSPage() {
             {[...Array(8)].map((_, index) => (
               <div
                 key={index}
-                className="bg-orange-50/70 rounded-[16px] w-full h-57 p-2 flex flex-col items-center animate-pulse"
+                className="bg-orange-50/70 rounded-[16px] w-full p-2 flex flex-col items-center animate-pulse h-full"
               >
                 {/* Skeleton Kotak Gambar */}
                 <div className="w-full aspect-square bg-neutral-200/70 rounded-[8px] mb-3"></div>
@@ -175,7 +175,7 @@ export default function POSPage() {
                 <div
                   key={menu.id}
                   onClick={() => handleItemClick(menu)}
-                  className="bg-orange-100 rounded-[16px] w-full h-57 p-2 flex flex-col items-center cursor-pointer hover:border border-orange-300 transition-all active:scale-95 relative select-none"
+                  className="bg-orange-100 rounded-[16px] w-full p-2 flex flex-col items-center cursor-pointer hover:border border-orange-300 transition-all active:scale-95 relative select-none h-full"
                 >
                   {currentQty > 0 && (
                     <div className="absolute -top-2 -right-2 bg-orange-500 text-white font-bold text-xs w-7 h-7 flex items-center justify-center rounded-full z-10 border-2 border-white animate-in zoom-in duration-200">
@@ -255,7 +255,7 @@ export default function POSPage() {
               </div>
 
               {/* Pill Kuantitas Putih */}
-              <div className="flex items-center bg-neutral-50 backdrop-blur-sm rounded-[8px] border border-white p-1 px-2 shrink-0 shadow-sm">
+              <div className="flex items-center bg-neutral-50 backdrop-blur-sm rounded-[8px] border border-white p-1 px-2 shrink-0">
                 <button onClick={() => updateQty(item.id, -1)} className="w-6 h-6 flex items-center justify-center text-neutral-950 hover:bg-neutral-100 rounded-full transition-colors cursor-pointer">-</button>
                 <span className="w-6 text-center text-neutral-950 text-[15px]">{item.qty}</span>
                 <button onClick={() => updateQty(item.id, 1)} className="w-6 h-6 flex items-center justify-center text-neutral-950 hover:bg-neutral-100 rounded-full transition-colors cursor-pointer">+</button>

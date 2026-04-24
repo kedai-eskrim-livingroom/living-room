@@ -357,19 +357,17 @@ function DeleteModal({ isOpen, onClose, onConfirm, voucher }) {
 
 function VoucherCard({ voucher, onEdit, onDelete }) {
   return (
-    <div className="flex items-stretch rounded-2xl overflow-hidden border border-orange-100">
+    <div className="flex items-stretch rounded-2xl overflow-hidden">
       {/* Left: code (vertical rotated) */}
-      <div className="bg-[#FFF0DC] flex items-center justify-center px-3 min-w-13 border-r-2 border-dashed border-orange-300 relative">
+      <div className="bg-orange-50 flex items-center justify-center px-3 min-w-13 border-r-2 border-dashed border-orange-300 relative">
         <span
           className="text-[#FF7A00] font-bold text-xs tracking-widest uppercase"
           style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
         >
           {voucher.code}
         </span>
-        {/* Notch top */}
-        <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-5 h-5 bg-white rounded-full border border-orange-100" />
-        {/* Notch bottom */}
-        <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 w-5 h-5 bg-white rounded-full border border-orange-100" />
+        {/* Notch left edge */}
+        <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-[#Ffffff] rounded-full" />
       </div>
 
       {/* Middle: info */}
@@ -410,7 +408,10 @@ function VoucherCard({ voucher, onEdit, onDelete }) {
 function SkeletonCard() {
   return (
     <div className="flex items-stretch rounded-2xl overflow-hidden border border-orange-100 animate-pulse">
-      <div className="bg-orange-100 w-14 min-h-20" />
+      <div className="bg-orange-100 w-14 min-h-20 relative">
+        {/* Notch left edge placeholder */}
+        <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-[#F8F9FA] rounded-full" />
+      </div>
       <div className="flex-1 bg-orange-50 px-4 py-4 flex flex-col justify-center gap-2">
         <div className="h-4 bg-orange-200 rounded w-3/4" />
         <div className="h-3 bg-orange-100 rounded w-1/2" />
