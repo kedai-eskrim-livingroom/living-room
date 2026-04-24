@@ -444,10 +444,8 @@ export default function MenuAdminPage() {
   };
 
   return (
-    <div className="flex flex-col gap-5 max-w-2xl mx-auto pb-10">
-      <div className="flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold text-gray-900 mt-2">Menu</h1>
-      </div>
+    <div className="flex flex-col gap-6 max-w-2xl mx-auto pb-10">
+      <h1 className="text-2xl font-bold text-neutral-900 mt-2">Menu</h1>
 
       <div className="relative">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />

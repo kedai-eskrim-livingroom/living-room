@@ -477,12 +477,12 @@ export default function VoucherPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white px-4 py-6 max-w-xl mx-auto">
+    <div className="flex flex-col gap-6 max-w-2xl mx-auto pb-10">
       {/* Page Title */}
-      <h1 className="text-2xl font-bold text-gray-900 mb-5">Voucher</h1>
+      <h1 className="text-2xl font-bold text-black mt-2">Voucher</h1>
 
       {/* Search */}
-      <div className="relative mb-4">
+      <div className="relative">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
         <input
           id="voucher-search"
@@ -498,7 +498,7 @@ export default function VoucherPage() {
       <button
         id="voucher-tambah-btn"
         onClick={() => setFormModal({ open: true, editData: null })}
-        className="w-full bg-[#FF7A00] hover:bg-[#E56E00] text-white font-bold text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 mb-5 transition-colors shadow-sm"
+        className="w-full bg-[#FF7A00] hover:bg-[#E56E00] text-white font-bold text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"
       >
         <Plus className="w-4 h-4" strokeWidth={2.5} />
         Tambah Voucher
@@ -506,7 +506,7 @@ export default function VoucherPage() {
 
       {/* Error state */}
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl px-4 py-3 mb-4 flex items-center justify-between">
+        <div className="bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl px-4 py-3 flex items-center justify-between">
           <span>{error}</span>
           <button onClick={fetchVouchers} className="ml-3 underline font-semibold">
             Coba lagi
