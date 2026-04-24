@@ -219,28 +219,25 @@ export default function Dashboard() {
                 icon={<IconReceipt size={28} stroke={2} />}
                 label="Total Items Terjual"
                 value={String(d.summary.totalItemsSold || 0)}
-                bg="orange"
                 from="from-orange-300/50" to="to-orange-100"
-                borderColor="border-[#FF6900]" textColor="text-[#F54A00]" delay={0}
-                iconBorderColor="border-[#FFB86A]"
+                borderColor="border-orange-500" labelColor="text-orange-500" textColor="text-orange-600" delay={0}
+                iconBorderColor="border-orange-300"
               />
               <StatCard
                 icon={<IconWallet size={28} stroke={2} />}
                 label="Total Pendapatan"
                 value={formatRupiah(d.summary.totalRevenue)}
-                bg="emerald"
                 from="from-emerald-300/50" to="to-emerald-100"
-                borderColor="border-[#00BC7D]" textColor="text-[#009966]" delay={60}
-                iconBorderColor="border-[#5EE9B5]"
+                borderColor="border-emerald-500" labelColor="text-emerald-500" textColor="text-emerald-600" delay={60}
+                iconBorderColor="border-emerald-300"
               />
               <StatCard
                 icon={<IconChartBar size={28} stroke={2} />}
                 label="Rata-Rata Pendapatan"
                 value={formatRupiah(d.summary.averageRevenue)}
-                bg="sky"
                 from="from-sky-300/50" to="to-sky-100"
-                borderColor="border-[#00A6F4]" textColor="text-[#0084D1]" delay={120}
-                iconBorderColor="border-[#74D4FF]"
+                borderColor="border-sky-500" labelColor="text-sky-500" textColor="text-sky-600" delay={60}
+                iconBorderColor="border-sky-300"
               />
             </div>
 

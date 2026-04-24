@@ -9,16 +9,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
     IconReceipt,
-    IconCurrencyDollar,
     IconCalendarWeek,
     IconCash,
     IconLoader2,
-    IconFileExport
+    IconFileExport,
+    IconBusinessplan
 } from '@tabler/icons-react';
 
 import DateRangeModal from "@/components/DateRangeModal";
 import { exportExcel, getHistory } from "@/services/api/history";
 import Image from "next/image";
+import StatCard from "@/components/StatCard";
 const fetcher = async ([key, start, end]) => {
     const res = await getHistory(start, end);
     return res.data; // res.data ini berisi { summary, orders } dari backend
@@ -52,7 +53,7 @@ export default function RiwayatAdminPage() {
         headerDateLabel = `${format(new Date(dateFilter.start), "dd MMM yyyy")} - ${format(new Date(dateFilter.end), "dd MMM yyyy")}`;
     } else if (dateFilter.start) {
         dateLabel = format(new Date(dateFilter.start), "MMM dd, yyyy");
-        headerDateLabel = format(new Date(dateFilter.start), "EEEE, dd MMMM yyyy", { locale: id });
+        headerDateLabel = "Hari ini, " + format(new Date(dateFilter.start), "dd MMMM yyyy", { locale: id });
     }
 
     // Tampilan jika terjadi Error pada Fetching SWR
@@ -70,30 +71,22 @@ export default function RiwayatAdminPage() {
 
             {/* Area Summary Cards */}
             <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-2 p-4 shadow-none rounded-[16px] bg-linear-to-r from-orange-300/50 to-orange-100 border-orange-500 border">
-                    <div className="flex items-center justify-center w-14 h-14 bg-white rounded-lg border border-orange-300 shrink-0">
-                        <IconReceipt className="w-7 h-7 text-orange-500" stroke={2} />
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="text-xl font-medium text-orange-500">Total Items Terjual</span>
-                        <span className="text-2xl font-bold text-orange-600">
-                            {isLoading ? "..." : summary.totalItemsSold}
-                        </span>
-                    </div>
-                </div>
-                <div className="flex items-center gap-2 p-4 shadow-none rounded-[16px] bg-linear-to-r from-emerald-300/50 to-emerald-100 border-emerald-500 border">
-                    <div className="flex items-center justify-center w-14 h-14 bg-white rounded-lg border border-emerald-300 shrink-0">
-                        <IconCurrencyDollar className="w-7 h-7 text-emerald-500" stroke={2} />
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="text-xl font-medium text-emerald-500">Hari Ini </span>
-                        <span className="text-2xl font-bold text-emerald-600">
-                            {isLoading ? "..." : `Rp ${summary.totalRevenue.toLocaleString("id-ID")}`}
-                        </span>
-                    </div>
-                </div>
-
-
+                <StatCard
+                    icon={<IconReceipt size={28} stroke={2} />}
+                    label="Total Items Terjual"
+                    value={isLoading ? "..." : summary.totalItemsSold}
+                    from="from-orange-300/50" to="to-orange-100"
+                    borderColor="border-orange-500" labelColor="text-orange-500" textColor="text-orange-600" delay={0}
+                    iconBorderColor="border-orange-300"
+                />
+                <StatCard
+                    icon={<IconBusinessplan size={28} stroke={2} />}
+                    label="Total Pendapatan"
+                    value={isLoading ? "..." : `Rp ${summary.totalRevenue.toLocaleString("id-ID")}`}
+                    from="from-emerald-300/50" to="to-emerald-100"
+                    borderColor="border-emerald-500" labelColor="text-emerald-500" textColor="text-emerald-600" delay={60}
+                    iconBorderColor="border-emerald-300"
+                />
             </div>
 
             {/* Area Action & Filter */}
@@ -105,8 +98,8 @@ export default function RiwayatAdminPage() {
                     isExport={true}
                     onAction={async (start, end) => await exportExcel(start, end)}
                     triggerNode={
-                        <Button className="w-full bg-[#FF7A00] hover:bg-[#E56E00] text-white rounded-lg py-6 font-bold">
-                            <IconFileExport className="w-5 h-5 mr-2" /> Export
+                        <Button className="w-full bg-orange-500 hover:bg-orange-700 text-white rounded-lg py-2 px-4 gap-1 font-semibold text-sm min-h-10.5">
+                            <IconFileExport className="w-5 h-5" /> Export
                         </Button>
                     }
                 />
@@ -130,7 +123,7 @@ export default function RiwayatAdminPage() {
             {/* Daftar Riwayat Transaksi */}
             <div className="flex flex-col gap-3 mt-2">
                 <div className="flex items-baseline gap-2 mb-1">
-                    <h2 className="text-base font-bold text-neutral-900 capitalize">{headerDateLabel}</h2>
+                    <h2 className="text-base font-semibold text-neutral-900 capitalize">{headerDateLabel}</h2>
                 </div>
 
                 {isLoading ? (
@@ -151,17 +144,17 @@ export default function RiwayatAdminPage() {
                         });
 
                         return (
-                            <div key={order.id} className="flex items-center justify-between p-4 bg-[#FFF8F3] border-none rounded-xl hover:shadow-md transition-shadow">
+                            <div key={order.id} className="flex items-center justify-between p-2 bg-orange-100 border-none rounded-xl hover:shadow-md transition-shadow min-h-14">
                                 <div className="flex items-center gap-4">
-                                    <div className="flex items-center justify-center w-12 h-12 bg-white border border-neutral-200 rounded-lg shrink-0">
-                                        {order.paymentMethod === "QRIS" ? <Image width={6} height={6} src={"/qris.svg"} alt="qris" className="w-6 h-6 text-neutral-700" /> : <IconCash className="w-6 h-6 text-neutral-700" />}
+                                    <div className="flex items-center justify-center w-12 h-12 bg-white border border-orange-300 rounded-lg shrink-0">
+                                        {order.paymentMethod === "QRIS" ? <Image width={28} height={13} src={"/qris.svg"} alt="qris" className="w-7 h-3.25 text-neutral-700" /> : <IconCash className="w-6 h-5.5 text-neutral-700" />}
                                     </div>
                                     <div className="flex flex-col max-w-[150px] sm:max-w-xs">
-                                        <span className="font-bold text-neutral-900 truncate">{itemsString}</span>
-                                        <span className="text-sm text-neutral-500">{timeString}</span>
+                                        <span className="font-semibold text-black text-sm truncate">{itemsString}</span>
+                                        <span className="text-sm text-black">{timeString}</span>
                                     </div>
                                 </div>
-                                <span className="font-bold text-[#FF7A00] shrink-0">
+                                <span className="font-bold text-orange-500 text-sm shrink-0">
                                     Rp {order.totalPrice.toLocaleString("id-ID")}
                                 </span>
                             </div>
