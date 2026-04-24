@@ -11,7 +11,7 @@ import {
   LogOut 
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { logoutUser } from "@/utils/auth";
+import { logoutUser } from "@/services/auth";
 
 
 // Daftar menu navigasi sesuai desain

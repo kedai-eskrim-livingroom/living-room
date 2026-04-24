@@ -8,7 +8,7 @@ import {
   createMenu,
   updateMenu,
   deleteMenu,
-} from "@/utils/api/admin/menu";
+} from "@/services/api/admin/menu";
 
 import {
   Dialog,
@@ -168,11 +168,10 @@ function MenuFormModal({ isOpen, onClose, onSubmit, editData }) {
               placeholder="Nama menu"
               value={form.name}
               onChange={(e) => handleChange("name", e.target.value)}
-              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-gray-400 ${
-                errors.name
+              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-gray-400 ${errors.name
                   ? "border-red-400 focus:border-red-500"
                   : "border-gray-200 focus:border-[#FF7A00]"
-              }`}
+                }`}
             />
             {errors.name && <p className="text-xs text-red-500 mt-0.5">{errors.name}</p>}
           </div>
@@ -185,11 +184,10 @@ function MenuFormModal({ isOpen, onClose, onSubmit, editData }) {
               placeholder="Deskripsi menu"
               value={form.description}
               onChange={(e) => handleChange("description", e.target.value)}
-              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-gray-400 resize-none ${
-                errors.description
+              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-gray-400 resize-none ${errors.description
                   ? "border-red-400 focus:border-red-500"
                   : "border-gray-200 focus:border-[#FF7A00]"
-              }`}
+                }`}
             />
             {errors.description && (
               <p className="text-xs text-red-500 mt-0.5">{errors.description}</p>
@@ -205,11 +203,10 @@ function MenuFormModal({ isOpen, onClose, onSubmit, editData }) {
               placeholder="Rp0.000"
               value={form.price ? `Rp${formatRupiah(form.price)}` : ""}
               onChange={handlePriceChange}
-              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-gray-400 ${
-                errors.price
+              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-gray-400 ${errors.price
                   ? "border-red-400 focus:border-red-500"
                   : "border-gray-200 focus:border-[#FF7A00]"
-              }`}
+                }`}
             />
             {errors.price && <p className="text-xs text-red-500 mt-0.5">{errors.price}</p>}
           </div>
@@ -235,11 +232,10 @@ function MenuFormModal({ isOpen, onClose, onSubmit, editData }) {
               type="file"
               accept="image/*"
               onChange={(e) => handleChange("photoFile", e.target.files?.[0] ?? null)}
-              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors ${
-                errors.photo
+              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors ${errors.photo
                   ? "border-red-400 focus:border-red-500"
                   : "border-gray-200 focus:border-[#FF7A00]"
-              }`}
+                }`}
             />
             {errors.photo && <p className="text-xs text-red-500 mt-0.5">{errors.photo}</p>}
           </div>

@@ -4,9 +4,9 @@ import { useState } from "react";
 import useSWR from "swr";
 import Image from "next/image";
 
-import { getMenuPenjaga } from "@/utils/api/penjaga/menu";
-import { validateVoucher } from "@/utils/api/penjaga/voucher";
-import { createOrder } from "@/utils/api/penjaga/order";
+import { getMenuPenjaga } from "@/services/api/penjaga/menu";
+import { validateVoucher } from "@/services/api/penjaga/voucher";
+import { createOrder } from "@/services/api/penjaga/order";
 
 import {
   IconReceipt, IconArrowNarrowLeft, IconTicket,

@@ -15,7 +15,7 @@ import {
 import { IconBusinessplan, IconToolsKitchen2 } from '@tabler/icons-react';
 
 import DateRangeModal from "@/components/DateRangeModal";
-import { exportExcel, getHistory } from "@/utils/api/history";
+import { exportExcel, getHistory } from "@/services/api/history";
 import Image from "next/image";
 const fetcher = async ([key, start, end]) => {
     const res = await getHistory(start, end);

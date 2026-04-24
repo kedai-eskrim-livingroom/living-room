@@ -9,7 +9,7 @@ import {
   createVoucher,
   updateVoucher,
   deleteVoucher,
-} from "@/utils/api/admin/voucher";
+} from "@/services/api/admin/voucher";
 import {
   Dialog,
   DialogContent,
@@ -182,11 +182,10 @@ function VoucherFormModal({ isOpen, onClose, onSubmit, editData }) {
               placeholder="Code"
               value={form.code}
               onChange={(e) => handleChange("code", e.target.value)}
-              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-gray-400 ${
-                errors.code
+              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-gray-400 ${errors.code
                   ? "border-red-400 focus:border-red-500"
                   : "border-gray-200 focus:border-[#FF7A00]"
-              }`}
+                }`}
             />
             {errors.code && (
               <p className="text-xs text-red-500 mt-0.5">{errors.code}</p>
@@ -203,11 +202,10 @@ function VoucherFormModal({ isOpen, onClose, onSubmit, editData }) {
               placeholder="Rp0.000"
               value={form.discount ? `Rp${formatRupiah(form.discount)}` : ""}
               onChange={handleDiscountChange}
-              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-gray-400 ${
-                errors.discount
+              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-gray-400 ${errors.discount
                   ? "border-red-400 focus:border-red-500"
                   : "border-gray-200 focus:border-[#FF7A00]"
-              }`}
+                }`}
             />
             {errors.discount && (
               <p className="text-xs text-red-500 mt-0.5">{errors.discount}</p>
@@ -230,16 +228,14 @@ function VoucherFormModal({ isOpen, onClose, onSubmit, editData }) {
                 <button
                   id="voucher-expiry-btn"
                   type="button"
-                  className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors flex items-center gap-2 text-left ${
-                    errors.startDate || errors.endDate
+                  className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors flex items-center gap-2 text-left ${errors.startDate || errors.endDate
                       ? "border-red-400"
                       : "border-gray-200 hover:border-[#FF7A00]"
-                  }`}
+                    }`}
                 >
                   <CalendarDays
-                    className={`w-4 h-4 shrink-0 ${
-                      form.startDate || form.endDate ? "text-[#FF7A00]" : "text-gray-400"
-                    }`}
+                    className={`w-4 h-4 shrink-0 ${form.startDate || form.endDate ? "text-[#FF7A00]" : "text-gray-400"
+                      }`}
                   />
                   <span
                     className={
@@ -249,8 +245,8 @@ function VoucherFormModal({ isOpen, onClose, onSubmit, editData }) {
                     {form.startDate && form.endDate
                       ? `${formatDateDisplay(form.startDate)} – ${formatDateDisplay(form.endDate)}`
                       : form.startDate
-                      ? `${formatDateDisplay(form.startDate)} – Pilih akhir`
-                      : "Pilih Tanggal Mulai & Akhir"}
+                        ? `${formatDateDisplay(form.startDate)} – Pilih akhir`
+                        : "Pilih Tanggal Mulai & Akhir"}
                   </span>
                 </button>
               }

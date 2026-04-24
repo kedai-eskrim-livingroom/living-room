@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getDashboard } from "@/utils/api/admin/dashboard";
+import { getDashboard } from "@/services/api/admin/dashboard";
 import {
   IconCalendar,
   IconReceipt,
