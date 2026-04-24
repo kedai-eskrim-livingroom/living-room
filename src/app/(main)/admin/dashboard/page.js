@@ -219,21 +219,27 @@ export default function Dashboard() {
                 icon={<IconReceipt size={28} stroke={2} />}
                 label="Total Items Terjual"
                 value={String(d.summary.totalItemsSold || 0)}
-                bg="bg-[#FFB86A]/50" borderColor="border-[#FF6900]" textColor="text-[#F54A00]" delay={0}
+                bg="orange"
+                from="from-orange-300/50" to="to-orange-100"
+                borderColor="border-[#FF6900]" textColor="text-[#F54A00]" delay={0}
                 iconBorderColor="border-[#FFB86A]"
               />
               <StatCard
                 icon={<IconWallet size={28} stroke={2} />}
                 label="Total Pendapatan"
                 value={formatRupiah(d.summary.totalRevenue)}
-                bg="bg-[#5EE9B5]/50" borderColor="border-[#00BC7D]" textColor="text-[#009966]" delay={60}
+                bg="emerald"
+                from="from-emerald-300/50" to="to-emerald-100"
+                borderColor="border-[#00BC7D]" textColor="text-[#009966]" delay={60}
                 iconBorderColor="border-[#5EE9B5]"
               />
               <StatCard
                 icon={<IconChartBar size={28} stroke={2} />}
                 label="Rata-Rata Pendapatan"
                 value={formatRupiah(d.summary.averageRevenue)}
-                bg="bg-[#74D4FF]/50" borderColor="border-[#00A6F4]" textColor="text-[#0084D1]" delay={120}
+                bg="sky"
+                from="from-sky-300/50" to="to-sky-100"
+                borderColor="border-[#00A6F4]" textColor="text-[#0084D1]" delay={120}
                 iconBorderColor="border-[#74D4FF]"
               />
             </div>
