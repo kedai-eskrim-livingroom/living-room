@@ -11,9 +11,10 @@ import {
   IconChevronLeft,
   IconChevronRight
 } from "@tabler/icons-react";
+import dynamic from "next/dynamic";
 import DateRangeModal from "@/components/DateRangeModal";
 import StatCard from "@/components/StatCard";
-
+const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 function formatRupiah(amount) {
   if (!amount && amount !== 0) return "Rp 0";
@@ -45,56 +46,82 @@ function toISO(date) {
 
 
 
-// ─── Growth Chart (Dinamis) ────────────────────────────────────────────────────
 function GrowthChart({ data }) {
-  console.log(data, "chart");
-
   if (!data || data.length === 0) return null;
 
-  const max = Math.max(...data.map((d) => d.revenue));
-  const min = Math.min(...data.map((d) => d.revenue));
-  const range = max - min || 1;
-  const W = 560, H = 140, PAD_X = 20, PAD_Y = 20;
-  const length = data.length != 1 ? data.length : 1;
+  // Siapkan data untuk ApexCharts
+  const series = [{
+    name: "Pendapatan",
+    data: data.map(d => d.revenue) // Ambil nilai angkanya saja
+  }];
 
-  const pts = data.map((d, i) => ({
-    x: PAD_X + i * ((W - PAD_X * 2) / (length)),
-    y: PAD_Y + (1 - (d.revenue - min) / range) * (H - PAD_Y * 2),
-  }));
-
-  console.log(pts, "pts");
-  const smooth = pts.map((p, i) => {
-    if (i === 0) return `M${p.x},${p.y}`;
-    const prev = pts[i - 1];
-    const cpx = (prev.x + p.x) / 2;
-    return `C${cpx},${prev.y} ${cpx},${p.y} ${p.x},${p.y}`;
-  }).join(" ");
-
-  const areaSmooth = smooth + ` L${pts[pts.length - 1].x},${H} L${pts[0].x},${H} Z`;
+  const options = {
+    chart: {
+      type: 'area',
+      fontFamily: 'inherit',
+      toolbar: { show: false }, // Hilangkan menu hamburger bawaan apexcharts
+      zoom: { enabled: false }
+    },
+    colors: ['#FF8C42'], // Warna garis oranye
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shadeIntensity: 1,
+        opacityFrom: 0.4, // Gradasi atas
+        opacityTo: 0.0,   // Gradasi bawah (menghilang)
+        stops: [0, 100]
+      }
+    },
+    dataLabels: {
+      enabled: false // Matikan angka di titik grafik
+    },
+    stroke: {
+      curve: 'smooth', // Efek melengkung halus seperti di desain
+      width: 2.5
+    },
+    grid: {
+      borderColor: '#FFDCC2', // Warna garis putus-putus
+      strokeDashArray: 4,     // Efek putus-putus
+      xaxis: { lines: { show: false } }, // Hilangkan garis vertikal
+      yaxis: { lines: { show: true } },  // Tampilkan garis horizontal
+      padding: { top: 0, right: 0, bottom: 0, left: 10 }
+    },
+    xaxis: {
+      categories: data.map(d => d.day), // Label hari (Sen, Rab, Jum, dll)
+      axisBorder: { show: false },      // Hilangkan garis bawah tebal
+      axisTicks: { show: false },
+      labels: {
+        style: { colors: '#A89A8E', fontSize: '11px' }
+      }
+    },
+    yaxis: {
+      labels: {
+        style: { colors: '#A89A8E', fontSize: '11px' },
+        formatter: (value) => {
+          // Format angka jadi "k" (contoh: 1250000 -> 1.250k)
+          if (value >= 1000) {
+            return (value / 1000).toLocaleString('id-ID') + 'k';
+          }
+          return value.toLocaleString('id-ID');
+        }
+      }
+    },
+    tooltip: {
+      y: {
+        formatter: (val) => `Rp ${val.toLocaleString('id-ID')}`
+      }
+    }
+  };
 
   return (
-    <svg viewBox={`0 0 ${W} ${H + 24}`} className="w-full mt-2" style={{ overflow: "visible" }}>
-      <defs>
-        <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#FF8C42" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="#FF8C42" stopOpacity="0.0" />
-        </linearGradient>
-      </defs>
-      {[0.25, 0.5, 0.75].map((r, i) => (
-        <line key={i} x1={PAD_X} y1={PAD_Y + r * (H - PAD_Y * 2)} x2={W - PAD_X} y2={PAD_Y + r * (H - PAD_Y * 2)} stroke="#FFDCC2" strokeWidth="0.5" strokeDasharray="4 4" />
-      ))}
-      <path d={areaSmooth} fill="url(#cg)" />
-      <path d={smooth} fill="none" stroke="#FF8C42" strokeWidth="2.5" strokeLinecap="round" />
-      {pts.map((p, i) => (
-        <g key={i}>
-          <circle cx={p.x} cy={p.y} r="5" fill="white" stroke="#FF8C42" strokeWidth="2.5" />
-          <circle cx={p.x} cy={p.y} r="2" fill="#FF8C42" />
-        </g>
-      ))}
-      {data.map((d, i) => (
-        <text key={i} x={pts[i].x} y={H + 20} textAnchor="middle" fontSize="11" fill="#A89A8E" fontFamily="Inter,sans-serif">{d.day}</text>
-      ))}
-    </svg>
+    <div className="w-full mt-2 relative z-0">
+      <ReactApexChart
+        options={options}
+        series={series}
+        type="area"
+        height={250}
+      />
+    </div>
   );
 }
 
