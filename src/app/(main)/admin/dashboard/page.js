@@ -62,15 +62,11 @@ function GrowthChart({ data }) {
       toolbar: { show: false }, // Hilangkan menu hamburger bawaan apexcharts
       zoom: { enabled: false }
     },
-    colors: ['#FF8C42'], // Warna garis oranye
+    colors: ['#FF6900'], // Warna garis oranye
     fill: {
-      type: 'gradient',
-      gradient: {
-        shadeIntensity: 1,
-        opacityFrom: 0.4, // Gradasi atas
-        opacityTo: 0.0,   // Gradasi bawah (menghilang)
-        stops: [0, 100]
-      }
+      colors: ['#FFD6A8'],
+      opacity: 0.5,
+      type: 'solid'
     },
     dataLabels: {
       enabled: false // Matikan angka di titik grafik
@@ -80,8 +76,7 @@ function GrowthChart({ data }) {
       width: 2.5
     },
     grid: {
-      borderColor: '#FFDCC2', // Warna garis putus-putus
-      strokeDashArray: 4,     // Efek putus-putus
+      borderColor: '#FAFAFA',     // Efek putus-putus
       xaxis: { lines: { show: false } }, // Hilangkan garis vertikal
       yaxis: { lines: { show: true } },  // Tampilkan garis horizontal
       padding: { top: 0, right: 0, bottom: 0, left: 10 }
@@ -91,12 +86,12 @@ function GrowthChart({ data }) {
       axisBorder: { show: false },      // Hilangkan garis bawah tebal
       axisTicks: { show: false },
       labels: {
-        style: { colors: '#A89A8E', fontSize: '11px' }
+        style: { colors: '#737373', fontSize: '11px' }
       }
     },
     yaxis: {
       labels: {
-        style: { colors: '#A89A8E', fontSize: '11px' },
+        style: { colors: '#737373', fontSize: '11px' },
         formatter: (value) => {
           // Format angka jadi "k" (contoh: 1250000 -> 1.250k)
           if (value >= 1000) {
