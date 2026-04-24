@@ -12,7 +12,7 @@ export default function OrderCard({
   return (
     <div 
       onClick={onClick}
-      className={`flex items-center justify-between p-2 bg-orange-100 border-none rounded-xl hover:shadow-md transition-shadow min-h-14 ${onClick ? 'cursor-pointer' : ''}`}
+      className={`flex items-center justify-between p-2 bg-orange-100 rounded-xl hover:border hover:border-orange-300 min-h-14 ${onClick ? 'cursor-pointer' : ''}`}
     >
       <div className="flex items-center gap-4">
         
