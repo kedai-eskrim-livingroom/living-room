@@ -146,7 +146,7 @@ export default function RiwayatAdminPage() {
 
                         return (
                             <OrderCard
-                                key={order.id} // Key wajib diletakkan di sini saat di-map
+                                key={order.id}
                                 paymentMethod={order.paymentMethod}
                                 itemsString={itemsString}
                                 timeString={timeString}
