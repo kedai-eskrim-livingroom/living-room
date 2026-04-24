@@ -20,6 +20,7 @@ import DateRangeModal from "@/components/DateRangeModal";
 import { exportExcel, getHistory } from "@/services/api/history";
 import Image from "next/image";
 import StatCard from "@/components/StatCard";
+import OrderCard from "@/components/OrderCard";
 const fetcher = async ([key, start, end]) => {
     const res = await getHistory(start, end);
     return res.data; // res.data ini berisi { summary, orders } dari backend
@@ -144,20 +145,13 @@ export default function RiwayatAdminPage() {
                         });
 
                         return (
-                            <div key={order.id} className="flex items-center justify-between p-2 bg-orange-100 border-none rounded-xl hover:shadow-md transition-shadow min-h-14">
-                                <div className="flex items-center gap-4">
-                                    <div className="flex items-center justify-center w-12 h-12 bg-white border border-orange-300 rounded-lg shrink-0">
-                                        {order.paymentMethod === "QRIS" ? <Image width={28} height={13} src={"/qris.svg"} alt="qris" className="w-7 h-3.25 text-neutral-700" /> : <IconCash className="w-6 h-5.5 text-neutral-700" />}
-                                    </div>
-                                    <div className="flex flex-col max-w-[150px] sm:max-w-xs">
-                                        <span className="font-semibold text-black text-sm truncate">{itemsString}</span>
-                                        <span className="text-sm text-black">{timeString}</span>
-                                    </div>
-                                </div>
-                                <span className="font-bold text-orange-500 text-sm shrink-0">
-                                    Rp {order.totalPrice.toLocaleString("id-ID")}
-                                </span>
-                            </div>
+                            <OrderCard
+                                key={order.id} // Key wajib diletakkan di sini saat di-map
+                                paymentMethod={order.paymentMethod}
+                                itemsString={itemsString}
+                                timeString={timeString}
+                                totalPrice={order.totalPrice}
+                            />
                         );
                     })
                 )}
