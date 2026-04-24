@@ -12,6 +12,7 @@ import {
   IconChevronRight
 } from "@tabler/icons-react";
 import DateRangeModal from "@/components/DateRangeModal";
+import StatCard from "@/components/StatCard";
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 function formatRupiah(amount) {
@@ -97,20 +98,6 @@ function GrowthChart({ data }) {
   );
 }
 
-// ─── Stat Card ─────────────────────────────────────────────────────────────────
-function StatCard({ icon, label, value, bg, borderColor, textColor, delay, iconBorderColor }) {
-  return (
-    <div className={`rounded-2xl p-4 flex items-center gap-2 border ${bg} ${borderColor}`} style={{ animation: `fadeUp 0.4s ease-out ${delay}ms both` }}>
-      <div className={`w-14 h-14 bg-white rounded-lg border ${iconBorderColor} flex items-center justify-center shrink-0 ${textColor}`}>
-        {icon}
-      </div>
-      <div>
-        <p className={`text-[12px] font-medium ${textColor}`}>{label}</p>
-        <p className={`font-extrabold text-2xl tracking-tight ${textColor}`}>{value}</p>
-      </div>
-    </div>
-  );
-}
 
 // ─── Top Selling Row ───────────────────────────────────────────────────────────
 function TopSellingRow({ name, items, maxItems }) {
@@ -172,9 +159,9 @@ export default function Dashboard() {
   }, [activePeriod]);
 
   const handleDateSet = async (startStr, endStr) => {
-    setDateRange({ 
-      start: startStr ? new Date(startStr) : null, 
-      end: endStr ? new Date(endStr) : null 
+    setDateRange({
+      start: startStr ? new Date(startStr) : null,
+      end: endStr ? new Date(endStr) : null
     });
     await fetchData(startStr, endStr);
   };
@@ -188,107 +175,107 @@ export default function Dashboard() {
     <>
       <div className="flex flex-col gap-6 max-w-2xl mx-auto pb-10">
 
-          <h1 className="text-2xl font-extrabold text-black mt-2">Dashboard</h1>
+        <h1 className="text-2xl font-extrabold text-black mt-2">Dashboard</h1>
 
-          {/* Period Buttons */}
-          <div className="flex gap-2">
-            {PERIODS.map((p) => (
-              <button
-                key={p}
-                onClick={() => setActivePeriod(p)}
-                className={[
-                  "flex-1 py-2 rounded-lg text-sm font-semibold border",
-                  activePeriod === p
-                    ? "bg-orange-500 text-white"
-                    : "bg-neutral-100 text-neutral-500",
-                ].join(" ")}
-              >{p}</button>
-            ))}
-          </div>
+        {/* Period Buttons */}
+        <div className="flex gap-2">
+          {PERIODS.map((p) => (
+            <button
+              key={p}
+              onClick={() => setActivePeriod(p)}
+              className={[
+                "flex-1 py-2 rounded-lg text-sm font-semibold border",
+                activePeriod === p
+                  ? "bg-orange-500 text-white"
+                  : "bg-neutral-100 text-neutral-500",
+              ].join(" ")}
+            >{p}</button>
+          ))}
+        </div>
 
-          {/* Date Input */}
-          <DateRangeModal
-            title="Pilih Rentang Tanggal"
-            actionLabel="Tampilkan Data"
-            onAction={handleDateSet}
-            triggerNode={
-              <button
-                className="flex items-center gap-2 w-full px-4 py-2 bg-white border border-neutral-300 rounded-lg text-sm text-neutral-400 transition-colors text-left font-medium hover:border-orange-500"
-              >
-                <span className="text-neutral-400"><IconCalendarWeek size={20} stroke={2} /></span>
-                {dateRange.start
-                  ? `${formatDateLabel(dateRange.start)}${dateRange.end ? " – " + formatDateLabel(dateRange.end) : ""}`
-                  : "Pilih tanggal kustom"}
-              </button>
-            }
-          />
+        {/* Date Input */}
+        <DateRangeModal
+          title="Pilih Rentang Tanggal"
+          actionLabel="Tampilkan Data"
+          onAction={handleDateSet}
+          triggerNode={
+            <button
+              className="flex items-center gap-2 w-full px-4 py-2 bg-white border border-neutral-300 rounded-lg text-sm text-neutral-400 transition-colors text-left font-medium hover:border-orange-500"
+            >
+              <span className="text-neutral-400"><IconCalendarWeek size={20} stroke={2} /></span>
+              {dateRange.start
+                ? `${formatDateLabel(dateRange.start)}${dateRange.end ? " – " + formatDateLabel(dateRange.end) : ""}`
+                : "Pilih tanggal kustom"}
+            </button>
+          }
+        />
 
-          {loading ? <Skeleton /> : (
-            <div style={{ animation: "fadeUp 0.35s ease-out" }}>
+        {loading ? <Skeleton /> : (
+          <div style={{ animation: "fadeUp 0.35s ease-out" }}>
 
-              {/* Stat Cards dengan Ikon Tabler */}
-              <div className="flex flex-col gap-4 mb-6">
-                <StatCard
-                  icon={<IconReceipt size={28} stroke={2} />}
-                  label="Total Items Terjual"
-                  value={String(d.summary.totalItemsSold || 0)}
-                  bg="bg-[#FFB86A]/50" borderColor="border-[#FF6900]" textColor="text-[#F54A00]" delay={0}
-                  iconBorderColor="border-[#FFB86A]"
-                />
-                <StatCard
-                  icon={<IconWallet size={28} stroke={2} />}
-                  label="Total Pendapatan"
-                  value={formatRupiah(d.summary.totalRevenue)}
-                  bg="bg-[#5EE9B5]/50" borderColor="border-[#00BC7D]" textColor="text-[#009966]" delay={60}
-                  iconBorderColor="border-[#5EE9B5]"
-                />
-                <StatCard
-                  icon={<IconChartBar size={28} stroke={2} />}
-                  label="Rata-Rata Pendapatan"
-                  value={formatRupiah(d.summary.averageRevenue)}
-                  bg="bg-[#74D4FF]/50" borderColor="border-[#00A6F4]" textColor="text-[#0084D1]" delay={120}
-                  iconBorderColor="border-[#74D4FF]"
-                />
-              </div>
-
-              {/* Top Selling */}
-              <div className="bg-orange-100 rounded-2xl border border-orange-500 p-4 mb-6" style={{ animation: "fadeUp 0.4s ease-out 180ms both" }}>
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="font-extrabold text-neutral-950 text-lg tracking-tight">Top Selling</h2>
-                </div>
-
-                {topSelling.length === 0 ? (
-                  <div className="py-6 text-center text-sm text-neutral-500 font-medium italic">
-                    Belum ada data penjualan
-                  </div>
-                ) : (
-                  <div className="flex flex-col gap-1">
-                    {topSelling.map((item, i) => (
-                      <TopSellingRow key={i}
-                        name={item.name || item.menuName || "Nama menu"}
-                        items={item.sold || item.totalItems || item.qty || 0}
-                        maxItems={maxItems}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Growth Chart */}
-              <div className="bg-orange-100 rounded-2xl border border-orange-500 p-4" style={{ animation: "fadeUp 0.4s ease-out 240ms both" }}>
-                <h2 className="font-extrabold text-gray-900 text-lg tracking-tight mb-2">Growth Penjualan</h2>
-
-                {growthData.length === 0 ? (
-                  <div className="py-10 text-center text-sm text-gray-500 font-medium italic">
-                    Belum ada data penjualan
-                  </div>
-                ) : (
-                  <GrowthChart data={growthData} />
-                )}
-              </div>
-
+            {/* Stat Cards dengan Ikon Tabler */}
+            <div className="flex flex-col gap-4 mb-6">
+              <StatCard
+                icon={<IconReceipt size={28} stroke={2} />}
+                label="Total Items Terjual"
+                value={String(d.summary.totalItemsSold || 0)}
+                bg="bg-[#FFB86A]/50" borderColor="border-[#FF6900]" textColor="text-[#F54A00]" delay={0}
+                iconBorderColor="border-[#FFB86A]"
+              />
+              <StatCard
+                icon={<IconWallet size={28} stroke={2} />}
+                label="Total Pendapatan"
+                value={formatRupiah(d.summary.totalRevenue)}
+                bg="bg-[#5EE9B5]/50" borderColor="border-[#00BC7D]" textColor="text-[#009966]" delay={60}
+                iconBorderColor="border-[#5EE9B5]"
+              />
+              <StatCard
+                icon={<IconChartBar size={28} stroke={2} />}
+                label="Rata-Rata Pendapatan"
+                value={formatRupiah(d.summary.averageRevenue)}
+                bg="bg-[#74D4FF]/50" borderColor="border-[#00A6F4]" textColor="text-[#0084D1]" delay={120}
+                iconBorderColor="border-[#74D4FF]"
+              />
             </div>
-          )}
+
+            {/* Top Selling */}
+            <div className="bg-orange-100 rounded-2xl border border-orange-500 p-4 mb-6" style={{ animation: "fadeUp 0.4s ease-out 180ms both" }}>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="font-extrabold text-neutral-950 text-lg tracking-tight">Top Selling</h2>
+              </div>
+
+              {topSelling.length === 0 ? (
+                <div className="py-6 text-center text-sm text-neutral-500 font-medium italic">
+                  Belum ada data penjualan
+                </div>
+              ) : (
+                <div className="flex flex-col gap-1">
+                  {topSelling.map((item, i) => (
+                    <TopSellingRow key={i}
+                      name={item.name || item.menuName || "Nama menu"}
+                      items={item.sold || item.totalItems || item.qty || 0}
+                      maxItems={maxItems}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Growth Chart */}
+            <div className="bg-orange-100 rounded-2xl border border-orange-500 p-4" style={{ animation: "fadeUp 0.4s ease-out 240ms both" }}>
+              <h2 className="font-extrabold text-gray-900 text-lg tracking-tight mb-2">Growth Penjualan</h2>
+
+              {growthData.length === 0 ? (
+                <div className="py-10 text-center text-sm text-gray-500 font-medium italic">
+                  Belum ada data penjualan
+                </div>
+              ) : (
+                <GrowthChart data={growthData} />
+              )}
+            </div>
+
+          </div>
+        )}
       </div>
 
 
