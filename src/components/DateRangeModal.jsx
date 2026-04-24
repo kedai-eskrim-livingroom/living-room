@@ -41,7 +41,7 @@ export default function DateRangeModal({
         - Default (HP): w-screen h-[100dvh] !rounded-none (Full screen)
         - md: (Desktop): md:w-fit md:h-auto md:!rounded-3xl (Modal melayang di tengah)
       */}
-      <DialogContent className="!max-w-none w-screen h-[100dvh] md:w-fit md:h-auto flex flex-col p-0 bg-white !rounded-none md:!rounded-3xl !border-none overflow-hidden [&>button]:hidden shadow-2xl transition-all duration-300">
+      <DialogContent className="max-w-none! w-screen h-dvh md:w-fit md:h-auto flex flex-col p-0 bg-white rounded-none! md:rounded-3xl! border-none! overflow-hidden [&>button]:hidden shadow-2xl transition-all duration-300">
         
         {/* Header Modal */}
         <DialogHeader className="flex flex-row items-center justify-between px-6 md:px-8 py-2 shrink-0 md:pb-4 md:pt-4">

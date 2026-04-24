@@ -11,21 +11,23 @@ import {
   IconLogout 
 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
-import { logoutUser } from "@/services/auth";
-
-
-// Daftar menu navigasi sesuai desain
-const menuItems = [
-  { name: "Pesanan", href: "/admin/dashboard", icon: IconLayoutDashboard },
-  { name: "Riwayat", href: "/admin/history", icon: IconHistory },
-  { name: "Menu", href: "/admin/menu", icon: IconToolsKitchen2 },
-  { name: "Voucher", href: "/admin/voucher", icon: IconTicket },
-];
+import { getUser, logoutUser } from "@/services/auth";
 
 export default function SidebarContent() {
   // Mengambil URL saat ini untuk efek menu aktif
   const pathname = usePathname();
-
+  const user = getUser();
+  // Daftar menu navigasi sesuai desain
+const menuItemsKasir = [
+  { name: "Pesanan", href: "/penjaga/order", icon: IconLayoutDashboard },
+  { name: "Riwayat", href: "/penjaga/history", icon: IconHistory },
+];
+const menuItemsAdmin = [
+  { name: "Dashboard", href: "/admin/dashboard", icon: IconLayoutDashboard },
+  { name: "Riwayat", href: "/admin/history", icon: IconHistory },
+  { name: "Menu", href: "/admin/menu", icon: IconToolsKitchen2 },
+  { name: "Voucher", href: "/admin/voucher", icon: IconTicket },
+];
   const handleLogout = () => {
     logoutUser(); // Menghapus cookie token
     window.location.href = "/"; // Redirect ke halaman login
@@ -48,9 +50,28 @@ export default function SidebarContent() {
 
       {/* 2. Menu Navigasi */}
       <nav className="flex-1 flex flex-col">
-        {menuItems.map((item) => {
+        {user?.role == "PENJAGA"
+          ? menuItemsKasir.map((item) => {
+              const isActive = pathname === item.href;
+              const Icon = item.icon;
+
+          return (
+            <Link key={item.name} href={item.href} passHref>
+              <div
+                className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors text-lg font-semibold ${
+                  isActive
+                    ? "bg-linear-to-br from-orange-500 to-orange-200 text-white" 
+                    : "text-neutral-950 hover:bg-orange-50 hover:text-orange-500"
+                }`}
+              >
+                <Icon className="w-5 h-5" />
+                {item.name}
+              </div>
+            </Link>
+          );
+        }) : menuItemsAdmin.map((item) => {
           const isActive = pathname === item.href;
-          const Icon = item.icon;
+              const Icon = item.icon;
 
           return (
             <Link key={item.name} href={item.href} passHref>

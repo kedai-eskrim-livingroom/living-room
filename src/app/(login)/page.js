@@ -51,7 +51,7 @@ export default function LoginPage() {
       />
 
       {/* Main content */}
-      <div className="relative z-10 flex flex-col items-center w-full max-w-[420px] px-5 gap-7">
+      <div className="relative z-10 flex flex-col items-center w-full max-w-105 px-5 gap-7">
         {/* Logo */}
         <div className="flex justify-center items-center">
           <Image

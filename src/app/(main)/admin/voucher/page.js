@@ -183,8 +183,8 @@ function VoucherFormModal({ isOpen, onClose, onSubmit, editData }) {
               value={form.code}
               onChange={(e) => handleChange("code", e.target.value)}
               className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-gray-400 ${errors.code
-                  ? "border-red-400 focus:border-red-500"
-                  : "border-gray-200 focus:border-[#FF7A00]"
+                ? "border-red-400 focus:border-red-500"
+                : "border-gray-200 focus:border-[#FF7A00]"
                 }`}
             />
             {errors.code && (
@@ -203,8 +203,8 @@ function VoucherFormModal({ isOpen, onClose, onSubmit, editData }) {
               value={form.discount ? `Rp${formatRupiah(form.discount)}` : ""}
               onChange={handleDiscountChange}
               className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-gray-400 ${errors.discount
-                  ? "border-red-400 focus:border-red-500"
-                  : "border-gray-200 focus:border-[#FF7A00]"
+                ? "border-red-400 focus:border-red-500"
+                : "border-gray-200 focus:border-[#FF7A00]"
                 }`}
             />
             {errors.discount && (
@@ -229,8 +229,8 @@ function VoucherFormModal({ isOpen, onClose, onSubmit, editData }) {
                   id="voucher-expiry-btn"
                   type="button"
                   className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors flex items-center gap-2 text-left ${errors.startDate || errors.endDate
-                      ? "border-red-400"
-                      : "border-gray-200 hover:border-[#FF7A00]"
+                    ? "border-red-400"
+                    : "border-gray-200 hover:border-[#FF7A00]"
                     }`}
                 >
                   <CalendarDays
@@ -359,7 +359,7 @@ function VoucherCard({ voucher, onEdit, onDelete }) {
   return (
     <div className="flex items-stretch rounded-2xl overflow-hidden shadow-sm border border-orange-100">
       {/* Left: code (vertical rotated) */}
-      <div className="bg-[#FFF0DC] flex items-center justify-center px-3 min-w-[52px] border-r-2 border-dashed border-orange-300 relative">
+      <div className="bg-[#FFF0DC] flex items-center justify-center px-3 min-w-13 border-r-2 border-dashed border-orange-300 relative">
         <span
           className="text-[#FF7A00] font-bold text-xs tracking-widest uppercase"
           style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
@@ -410,7 +410,7 @@ function VoucherCard({ voucher, onEdit, onDelete }) {
 function SkeletonCard() {
   return (
     <div className="flex items-stretch rounded-2xl overflow-hidden shadow-sm border border-orange-100 animate-pulse">
-      <div className="bg-orange-100 w-14 min-h-[80px]" />
+      <div className="bg-orange-100 w-14 min-h-20" />
       <div className="flex-1 bg-orange-50 px-4 py-4 flex flex-col justify-center gap-2">
         <div className="h-4 bg-orange-200 rounded w-3/4" />
         <div className="h-3 bg-orange-100 rounded w-1/2" />
