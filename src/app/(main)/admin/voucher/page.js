@@ -147,7 +147,7 @@ function VoucherFormModal({ isOpen, onClose, onSubmit, editData }) {
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         showCloseButton={false}
-        className="max-w-none! w-[calc(100%-2rem)] sm:max-w-sm bg-[#FFF8F0] rounded-3xl! border-none shadow-2xl p-0 gap-0"
+        className="max-w-none! w-[calc(100%-2rem)] sm:max-w-sm bg-[#FFF8F0] rounded-3xl! border-none p-0 gap-0"
       >
         {/* Header */}
         <DialogHeader className="flex flex-row items-center justify-between px-6 pt-6 pb-2">
@@ -310,7 +310,7 @@ function DeleteModal({ isOpen, onClose, onConfirm, voucher }) {
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         showCloseButton={false}
-        className="max-w-none! w-[calc(100%-2rem)] sm:max-w-xs bg-[#FFF8F0] rounded-3xl! border-none shadow-2xl p-6 gap-0"
+        className="max-w-none! w-[calc(100%-2rem)] sm:max-w-xs bg-[#FFF8F0] rounded-3xl! border-none p-6 gap-0"
       >
         <VisuallyHidden>
           <DialogTitle>Konfirmasi Hapus Voucher</DialogTitle>
@@ -357,7 +357,7 @@ function DeleteModal({ isOpen, onClose, onConfirm, voucher }) {
 
 function VoucherCard({ voucher, onEdit, onDelete }) {
   return (
-    <div className="flex items-stretch rounded-2xl overflow-hidden shadow-sm border border-orange-100">
+    <div className="flex items-stretch rounded-2xl overflow-hidden border border-orange-100">
       {/* Left: code (vertical rotated) */}
       <div className="bg-[#FFF0DC] flex items-center justify-center px-3 min-w-13 border-r-2 border-dashed border-orange-300 relative">
         <span
@@ -409,7 +409,7 @@ function VoucherCard({ voucher, onEdit, onDelete }) {
 
 function SkeletonCard() {
   return (
-    <div className="flex items-stretch rounded-2xl overflow-hidden shadow-sm border border-orange-100 animate-pulse">
+    <div className="flex items-stretch rounded-2xl overflow-hidden border border-orange-100 animate-pulse">
       <div className="bg-orange-100 w-14 min-h-20" />
       <div className="flex-1 bg-orange-50 px-4 py-4 flex flex-col justify-center gap-2">
         <div className="h-4 bg-orange-200 rounded w-3/4" />
@@ -498,7 +498,7 @@ export default function VoucherPage() {
       <button
         id="voucher-tambah-btn"
         onClick={() => setFormModal({ open: true, editData: null })}
-        className="w-full bg-[#FF7A00] hover:bg-[#E56E00] text-white font-bold text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"
+        className="w-full bg-[#FF7A00] hover:bg-[#E56E00] text-white font-bold text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors"
       >
         <Plus className="w-4 h-4" strokeWidth={2.5} />
         Tambah Voucher

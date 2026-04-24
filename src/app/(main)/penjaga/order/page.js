@@ -138,7 +138,7 @@ export default function POSPage() {
       {/* =========================================
           SISI KIRI: KATALOG MENU
           ========================================= */}
-      <div className={`flex-1 flex flex-col bg-white relative pb-32 lg:pb-8 lg:min-h-screen ${activeScreen === "cart" ? "hidden lg:flex" : "flex"}`}>
+      <div className={`flex-1 flex flex-col bg-white relative pb-32 lg:pb-8 lg:min-h-screen lg:pr-6 ${activeScreen === "cart" ? "hidden lg:flex" : "flex"}`}>
 
         <div className="mb-4">
           <h1 className="text-2xl font-semibold text-neutral-950">Pesanan</h1>
@@ -146,11 +146,11 @@ export default function POSPage() {
 
         {isLoadingMenus ? (
           // SKELETON LOADING
-          <div className="flex flex-wrap justify-center gap-2 overflow-x-auto py-2">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-2 py-2">
             {[...Array(8)].map((_, index) => (
               <div
                 key={index}
-                className="bg-orange-50/70 rounded-[16px] w-40 h-57 p-2 flex flex-col items-center animate-pulse"
+                className="bg-orange-50/70 rounded-[16px] w-full h-57 p-2 flex flex-col items-center animate-pulse"
               >
                 {/* Skeleton Kotak Gambar */}
                 <div className="w-full aspect-square bg-neutral-200/70 rounded-[8px] mb-3"></div>
@@ -168,21 +168,21 @@ export default function POSPage() {
         ) : menus.length === 0 ? (
           <div className="text-center text-neutral-500 py-10">Belum ada data menu.</div>
         ) : (
-          <div className="flex flex-wrap justify-center gap-2 overflow-x-auto py-2">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-2 py-2">
             {menus.map((menu) => {
               const currentQty = cart.find((item) => item.id === menu.id)?.qty || 0;
               return (
                 <div
                   key={menu.id}
                   onClick={() => handleItemClick(menu)}
-                  className="bg-orange-100 rounded-[16px] w-40 h-57 p-2 flex flex-col items-center cursor-pointer hover:shadow-md transition-all active:scale-95 relative select-none"
+                  className="bg-orange-100 rounded-[16px] w-full h-57 p-2 flex flex-col items-center cursor-pointer hover:border border-orange-300 transition-all active:scale-95 relative select-none"
                 >
                   {currentQty > 0 && (
-                    <div className="absolute -top-2 -right-2 bg-orange-500 text-white font-bold text-xs w-7 h-7 flex items-center justify-center rounded-full shadow-md z-10 border-2 border-white animate-in zoom-in duration-200">
+                    <div className="absolute -top-2 -right-2 bg-orange-500 text-white font-bold text-xs w-7 h-7 flex items-center justify-center rounded-full z-10 border-2 border-white animate-in zoom-in duration-200">
                       {currentQty}
                     </div>
                   )}
-                  <div className="w-full aspect-square bg-white rounded-[8px] mb-3 flex items-center justify-center overflow-hidden relative shadow-sm">
+                  <div className="w-full aspect-square bg-white rounded-[8px] mb-3 flex items-center justify-center overflow-hidden relative">
                     {menu.photo ? (
                       <Image src={menu.photo} alt={menu.name} fill sizes="50vw" className="object-cover bg-white" />
                     ) : (
@@ -201,7 +201,7 @@ export default function POSPage() {
           <div className="bg-neutral-50 rounded-t-[32px] pt-4 pb-6 px-5 shadow-[0_-15px_40px_rgba(0,0,0,0.08)] border-t border-neutral-300">
             <button
               onClick={() => setActiveScreen("cart")}
-              className="w-full bg-orange-500 hover:bg-orange-700 active:scale-[0.98] transition-all text-white rounded-2xl p-4 px-5 flex items-center justify-between shadow-lg shadow-orange-500/20"
+              className="w-full bg-orange-500 hover:bg-orange-700 active:scale-[0.98] transition-all text-white rounded-2xl p-4 px-5 flex items-center justify-between"
             >
               <div className="flex flex-col text-left text-white">
                 <span className="font-semibold text-[20px] leading-tight">{totalItems} Item</span>
@@ -216,7 +216,7 @@ export default function POSPage() {
       {/* =========================================
           SISI KANAN: KERANJANG (CART)
           ========================================= */}
-      <div className={`w-full lg:w-[400px] xl:w-[450px] flex flex-col lg:h-screen lg:sticky lg:top-0 relative pb-2 ${activeScreen === "catalog" ? "hidden lg:flex" : "flex"}`}>
+      <div className={`w-full lg:w-[400px] xl:w-[450px] flex flex-col lg:h-screen lg:sticky lg:top-[-24px] lg:-my-6 lg:py-6 relative pb-2 lg:border-l border-neutral-300 ${activeScreen === "catalog" ? "hidden lg:flex" : "flex"}`}>
 
         <header className="flex lg:hidden items-center pb-4 bg-white ">
           <button
@@ -228,7 +228,7 @@ export default function POSPage() {
           <h1 className="text-2xl font-semibold text-neutral-950 ml-2">Order</h1>
         </header>
 
-        <div className="hidden lg:block pb-2 border-b border-neutral-200 bg-white lg:px-4">
+        <div className="hidden lg:block pb-2 bg-white lg:px-4">
           <h2 className="text-2xl font-semibold text-neutral-950">Order</h2>
         </div>
 
@@ -241,7 +241,7 @@ export default function POSPage() {
             </div>
           )}
           {cart.map((item) => (
-            <div key={item.id} className="flex items-center bg-orange-100 rounded-[16px] min-h-25 p-2 shadow-sm">
+            <div key={item.id} className="flex items-center bg-orange-100 rounded-[16px] min-h-25 p-2">
               <div className="w-21 h-21 bg-white rounded-[8px] flex shrink-0 items-center justify-center overflow-hidden relative">
                 {item.photo ? (
                   <Image src={item.photo} alt={item.name} fill sizes="84px" className="object-cover" />
@@ -335,7 +335,7 @@ export default function POSPage() {
             <Button
               onClick={handleSaveOrder}
               disabled={isSaving || cart.length === 0}
-              className="bg-orange-500 hover:bg-orange-700 text-neutral-50 rounded-[8px] h-full py-2 px-4 shadow-md font-semibold disabled:opacity-70 text-[14px]"
+              className="bg-orange-500 hover:bg-orange-700 text-neutral-50 rounded-[8px] h-full py-2 px-4 font-semibold disabled:opacity-70 text-[14px]"
             >
               {isSaving ? <IconLoader2 className="w-6 h-6 mr-2 animate-spin" stroke={2.5} /> : <IconReportAnalytics className="w-6 h-6 mr-1" stroke={2.5} />}
               {isSaving ? "Proses..." : "Simpan Penjualan"}
@@ -349,9 +349,15 @@ export default function POSPage() {
           ========================================= */}
 
       <Sheet open={isPaymentSheetOpen} onOpenChange={setIsPaymentSheetOpen}>
-        <SheetContent side="bottom" className="rounded-t-[32px] md:w-[calc(100%-18rem)] lg:w-[400px] xl:w-[480px] right-0 md:left-auto! p-6 bg-white border-none pb-10">
-          <SheetHeader className="mb-6 border-b border-neutral-100 pb-4">
+        <SheetContent showCloseButton={false} side="bottom" className="rounded-t-[32px] md:w-[calc(100%-18rem)] lg:w-[400px] xl:w-[480px] right-0 md:left-auto! p-6 bg-white border-none pb-10">
+          <SheetHeader className=" flex flex-row items-center justify-between space-y-0">
             <SheetTitle className="text-xl font-bold text-neutral-950 text-left">Metode Pembayaran</SheetTitle>
+            <button
+              onClick={() => setIsPaymentSheetOpen(false)}
+              className="p-1.5 -mr-2 rounded-full hover:bg-neutral-100 transition-colors"
+            >
+              <IconX className="w-5 h-5 text-neutral-950" stroke={2.5} />
+            </button>
           </SheetHeader>
           <div className="flex flex-col gap-3">
             <button onClick={() => { setPaymentMethod("CASH"); setIsPaymentSheetOpen(false); }} className={`flex items-center justify-between w-full border ${paymentMethod === "CASH" ? "border-orange-500 bg-orange-100" : "border-neutral-200 bg-white"} rounded-2xl px-5 py-4 hover:bg-neutral-50 transition-colors`}>
@@ -368,7 +374,7 @@ export default function POSPage() {
 
       {/* CUSTOM TOAST NOTIFICATION */}
       {toast.show && (
-        <div className={`fixed bottom-6 right-6 z-[100] flex items-center gap-3 px-5 py-4 rounded-2xl shadow-2xl transition-all duration-300 animate-in slide-in-from-right-8 ${toast.type === "success" ? "bg-[#ECFDF5] text-[#059669] border border-[#A7F3D0]" : "bg-[#FEF2F2] text-[#DC2626] border border-[#FECACA]"
+        <div className={`fixed bottom-6 right-6 z-[100] flex items-center gap-3 px-5 py-4 rounded-2xl transition-all duration-300 animate-in slide-in-from-right-8 ${toast.type === "success" ? "bg-[#ECFDF5] text-[#059669] border border-[#A7F3D0]" : "bg-[#FEF2F2] text-[#DC2626] border border-[#FECACA]"
           }`}>
           {toast.type === "success" ? <IconCheck className="w-6 h-6" stroke={2.5} /> : <IconX className="w-6 h-6" stroke={2.5} />}
           <span className="font-bold text-sm">{toast.message}</span>
