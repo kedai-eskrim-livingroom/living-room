@@ -147,7 +147,7 @@ function VoucherFormModal({ isOpen, onClose, onSubmit, editData }) {
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         showCloseButton={false}
-        className="max-w-none! w-[calc(100%-2rem)] sm:max-w-sm bg-[#FFF8F0] rounded-3xl! border-none p-0 gap-0"
+        className="w-[calc(100%-2rem)] sm:max-w-sm bg-[#FFF8F0] rounded-3xl border-none p-0 gap-0"
       >
         {/* Header */}
         <DialogHeader className="flex flex-row items-center justify-between px-6 pt-6 pb-2">
@@ -310,7 +310,7 @@ function DeleteModal({ isOpen, onClose, onConfirm, voucher }) {
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         showCloseButton={false}
-        className="max-w-none! w-[calc(100%-2rem)] sm:max-w-xs bg-[#FFF8F0] rounded-3xl! border-none p-6 gap-0"
+        className="w-[calc(100%-2rem)] sm:max-w-xs bg-[#FFF8F0] rounded-3xl border-none p-6 gap-0"
       >
         <VisuallyHidden>
           <DialogTitle>Konfirmasi Hapus Voucher</DialogTitle>

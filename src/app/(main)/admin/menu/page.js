@@ -137,18 +137,18 @@ function MenuFormModal({ isOpen, onClose, onSubmit, editData }) {
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         showCloseButton={false}
-        className="max-w-none! w-[calc(100%-2rem)] sm:max-w-md bg-[#FFF8F0] rounded-3xl! border-none shadow-2xl p-0 gap-0"
+        className="w-[calc(100%-2rem)] sm:max-w-md bg-[#FFF8F0] rounded-2xl border border-orange-500 p-0 gap-0"
       >
         <DialogHeader className="flex flex-row items-center justify-between px-6 pt-6 pb-2">
-          <DialogTitle className="text-xl font-bold text-gray-900">
+          <DialogTitle className="text-xl font-bold text-black">
             {isEdit ? "Edit Menu" : "Tambah Menu Baru"}
           </DialogTitle>
           <DialogClose asChild>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-full hover:bg-orange-100 transition-colors"
+              className="p-1.5 rounded-md hover:bg-orange-100 transition-colors"
             >
-              <X className="w-5 h-5 text-gray-700" />
+              <X className="w-5 h-5 text-neutral-700" />
             </button>
           </DialogClose>
         </DialogHeader>
@@ -161,32 +161,32 @@ function MenuFormModal({ isOpen, onClose, onSubmit, editData }) {
           )}
 
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold text-gray-800">Nama</label>
+            <label className="text-sm font-semibold text-neutral-800">Nama</label>
             <input
               id="menu-name"
               type="text"
               placeholder="Nama menu"
               value={form.name}
               onChange={(e) => handleChange("name", e.target.value)}
-              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-gray-400 ${errors.name
+              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-neutral-400 ${errors.name
                   ? "border-red-400 focus:border-red-500"
-                  : "border-gray-200 focus:border-[#FF7A00]"
+                  : "border-neutral-200 focus:border-[#FF7A00]"
                 }`}
             />
             {errors.name && <p className="text-xs text-red-500 mt-0.5">{errors.name}</p>}
           </div>
 
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold text-gray-800">Deskripsi</label>
+            <label className="text-sm font-semibold text-neutral-800">Deskripsi</label>
             <textarea
               id="menu-description"
               rows={3}
               placeholder="Deskripsi menu"
               value={form.description}
               onChange={(e) => handleChange("description", e.target.value)}
-              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-gray-400 resize-none ${errors.description
+              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-neutral-400 resize-none ${errors.description
                   ? "border-red-400 focus:border-red-500"
-                  : "border-gray-200 focus:border-[#FF7A00]"
+                  : "border-neutral-200 focus:border-[#FF7A00]"
                 }`}
             />
             {errors.description && (
@@ -195,7 +195,7 @@ function MenuFormModal({ isOpen, onClose, onSubmit, editData }) {
           </div>
 
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold text-gray-800">Harga</label>
+            <label className="text-sm font-semibold text-neutral-800">Harga</label>
             <input
               id="menu-price"
               type="text"
@@ -203,16 +203,16 @@ function MenuFormModal({ isOpen, onClose, onSubmit, editData }) {
               placeholder="Rp0.000"
               value={form.price ? `Rp${formatRupiah(form.price)}` : ""}
               onChange={handlePriceChange}
-              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-gray-400 ${errors.price
+              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-neutral-400 ${errors.price
                   ? "border-red-400 focus:border-red-500"
-                  : "border-gray-200 focus:border-[#FF7A00]"
+                  : "border-neutral-200 focus:border-[#FF7A00]"
                 }`}
             />
             {errors.price && <p className="text-xs text-red-500 mt-0.5">{errors.price}</p>}
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold text-gray-800">Foto</label>
+            <label className="text-sm font-semibold text-neutral-800">Foto</label>
 
             {isEdit && form.photo && !form.photoFile ? (
               <div className="flex items-center gap-3">
@@ -221,7 +221,7 @@ function MenuFormModal({ isOpen, onClose, onSubmit, editData }) {
                   alt="Foto menu"
                   className="w-16 h-16 rounded-xl object-cover border border-orange-100"
                 />
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-neutral-500">
                   Menggunakan foto lama. Upload file baru jika ingin mengganti.
                 </div>
               </div>
@@ -234,7 +234,7 @@ function MenuFormModal({ isOpen, onClose, onSubmit, editData }) {
               onChange={(e) => handleChange("photoFile", e.target.files?.[0] ?? null)}
               className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors ${errors.photo
                   ? "border-red-400 focus:border-red-500"
-                  : "border-gray-200 focus:border-[#FF7A00]"
+                  : "border-neutral-200 focus:border-[#FF7A00]"
                 }`}
             />
             {errors.photo && <p className="text-xs text-red-500 mt-0.5">{errors.photo}</p>}
@@ -287,16 +287,16 @@ function DeleteModal({ isOpen, onClose, onConfirm, menu }) {
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         showCloseButton={false}
-        className="max-w-none! w-[calc(100%-2rem)] sm:max-w-xs bg-[#FFF8F0] rounded-3xl! border-none shadow-2xl p-6 gap-0"
+        className="w-[calc(100%-2rem)] sm:max-w-sm bg-[#FFF8F0] rounded-2xl border border-orange-500 p-6 gap-0"
       >
         <VisuallyHidden>
           <DialogTitle>Konfirmasi Hapus Menu</DialogTitle>
         </VisuallyHidden>
         <div className="flex flex-col items-center text-center gap-3">
-          <h2 className="text-lg font-bold text-gray-900">
-            Hapus menu <span className="text-[#FF7A00]">{menu?.name}</span>?
+          <h2 className="text-lg font-bold text-neutral-900">
+            Hapus menu <span className="text-orange-500">{menu?.name}</span>?
           </h2>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-black">
             Anda yakin ingin menghapus menu <span className="font-semibold">{menu?.name}</span>?
           </p>
           {deleteError && (
@@ -329,13 +329,13 @@ function DeleteModal({ isOpen, onClose, onConfirm, menu }) {
 
 function MenuCard({ menu, onEdit, onDelete }) {
   return (
-    <div className="flex items-stretch rounded-2xl overflow-hidden shadow-sm border border-orange-100">
-      <div className="w-24 bg-[#FFF0DC] flex items-center justify-center overflow-hidden">
+    <div className="flex items-stretch rounded-2xl overflow-hidden">
+      <div className="w-24 bg-orange-50 flex items-center justify-center p-2 shrink-0">
         {menu.photo ? (
           <img
             src={menu.photo}
             alt={menu.name}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover rounded-lg"
             onError={(e) => {
               e.target.style.display = "none";
               if (e.target.nextSibling) e.target.nextSibling.style.display = "flex";
@@ -351,8 +351,8 @@ function MenuCard({ menu, onEdit, onDelete }) {
       </div>
 
       <div className="flex-1 bg-[#FFF8F0] px-4 py-4 flex flex-col justify-center">
-        <p className="text-gray-900 font-bold text-base leading-tight truncate">{menu.name}</p>
-        <p className="text-gray-500 text-xs mt-1 line-clamp-2">{menu.description}</p>
+        <p className="text-neutral-900 font-bold text-base leading-tight truncate">{menu.name}</p>
+        <p className="text-neutral-500 text-xs mt-1 line-clamp-2">{menu.description}</p>
         <p className="text-[#FF7A00] font-bold text-sm mt-2">Rp{formatRupiah(menu.price)}</p>
       </div>
 
@@ -378,8 +378,10 @@ function MenuCard({ menu, onEdit, onDelete }) {
 
 function SkeletonCard() {
   return (
-    <div className="flex items-stretch rounded-2xl overflow-hidden shadow-sm border border-orange-100 animate-pulse">
-      <div className="bg-orange-100 w-24 min-h-[96px]" />
+    <div className="flex items-stretch rounded-2xl overflow-hidden border border-orange-100 animate-pulse">
+      <div className="bg-orange-100 w-24 min-h-[96px] p-2 shrink-0">
+        <div className="w-full h-full bg-orange-200 rounded-xl" />
+      </div>
       <div className="flex-1 bg-orange-50 px-4 py-4 flex flex-col justify-center gap-2">
         <div className="h-4 bg-orange-200 rounded w-3/4" />
         <div className="h-3 bg-orange-100 rounded w-2/3" />
@@ -448,21 +450,21 @@ export default function MenuAdminPage() {
       <h1 className="text-2xl font-bold text-neutral-900 mt-2">Menu</h1>
 
       <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
         <input
           id="menu-search"
           type="text"
           placeholder="Cari menu..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-3 text-sm outline-none focus:border-[#FF7A00] transition-colors placeholder:text-gray-400"
+          className="w-full bg-neutral-50 border border-neutral-200 rounded-xl pl-10 pr-4 py-3 text-sm outline-none focus:border-[#FF7A00] transition-colors placeholder:text-neutral-400"
         />
       </div>
 
       <button
         id="menu-tambah-btn"
         onClick={() => setFormModal({ open: true, editData: null })}
-        className="w-full bg-[#FF7A00] hover:bg-[#E56E00] text-white font-bold text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"
+        className="w-full bg-[#FF7A00] hover:bg-[#E56E00] text-white font-bold text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors"
       >
         <Plus className="w-4 h-4" strokeWidth={2.5} />
         Tambah Menu
@@ -481,7 +483,7 @@ export default function MenuAdminPage() {
         {isLoading ? (
           Array.from({ length: 5 }).map((_, i) => <SkeletonCard key={i} />)
         ) : filtered.length === 0 ? (
-          <div className="text-center py-16 text-gray-400 text-sm">
+          <div className="text-center py-16 text-neutral-400 text-sm">
             {search ? `Tidak ada menu dengan nama \"${search}\".` : "Belum ada menu. Tambahkan menu baru!"}
           </div>
         ) : (
