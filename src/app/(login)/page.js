@@ -65,15 +65,15 @@ export default function LoginPage() {
         </div>
 
         {/* Card */}
-        <div className="w-full bg-[#FEF0DC] rounded-[20px] border-[1.5px] border-[#F37021] px-6 pt-7 pb-8 box-border">
-          <h1 className="text-[22px] font-bold text-[#1A1A1A] mb-5 leading-tight">
+        <div className="w-full bg-orange-100 rounded-xl border-[1.5px] border-[#F37021] px-6 pt-7 pb-8 box-border">
+          <h1 className="text-xl font-semibold text-black mb-5 leading-tight">
             Login
           </h1>
 
           <form onSubmit={handleLogin} className="flex flex-col gap-4">
             {/* Email */}
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="email" className="text-[13px] font-medium text-[#1A1A1A]">
+              <label htmlFor="email" className="text-sm font-medium text-black">
                 Email
               </label>
               <input
@@ -84,13 +84,13 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 autoComplete="email"
-                className="w-full px-3.5 py-3 rounded-[10px] border-[1.5px] border-transparent bg-[#F5F5F5] text-sm text-[#1A1A1A] outline-none transition-all duration-200 focus:border-[#F37021] focus:shadow-[0_0_0_3px_rgba(243,112,33,0.15)] font-poppins"
+                className="w-full px-3.5 py-3 rounded-lg bg-white text-sm text-black outline-none transition-all duration-200"
               />
             </div>
 
             {/* Password */}
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="password" className="text-[13px] font-medium text-[#1A1A1A]">
+              <label htmlFor="password" className="text-sm font-medium text-black">
                 Password
               </label>
               <input
@@ -101,7 +101,7 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 autoComplete="current-password"
-                className="w-full px-3.5 py-3 rounded-[10px] border-[1.5px] border-transparent bg-[#F5F5F5] text-sm text-[#1A1A1A] outline-none transition-all duration-200 focus:border-[#F37021] focus:shadow-[0_0_0_3px_rgba(243,112,33,0.15)] font-poppins"
+                className="w-full px-3.5 py-3 rounded-lg bg-white text-sm text-black outline-none transition-all duration-200"
               />
             </div>
 

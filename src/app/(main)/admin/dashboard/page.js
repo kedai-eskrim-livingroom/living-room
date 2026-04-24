@@ -137,13 +137,43 @@ function TopSellingRow({ name, items, maxItems }) {
   );
 }
 
-// ─── Skeleton ──────────────────────────────────────────────────────────────────
 function Skeleton() {
   return (
     <div className="flex flex-col gap-4">
-      {[1, 2, 3].map(i => <div key={i} className="h-24 rounded-2xl bg-gray-100 border border-gray-200 animate-pulse" />)}
-      <div className="h-56 rounded-2xl bg-gray-100 border border-gray-200 animate-pulse mt-2" />
-      <div className="h-56 rounded-2xl bg-gray-100 border border-gray-200 animate-pulse" />
+      {/* Stat Card Skeletons */}
+      {[1, 2, 3].map(i => (
+        <div key={i} className="flex items-stretch rounded-2xl overflow-hidden border border-orange-100 animate-pulse min-h-[88px]">
+          {/* Icon placeholder */}
+          <div className="w-20 bg-orange-100 flex items-center justify-center shrink-0">
+            <div className="w-9 h-9 rounded-full bg-orange-200" />
+          </div>
+          {/* Text placeholder */}
+          <div className="flex-1 bg-orange-50 px-4 py-4 flex flex-col justify-center gap-2">
+            <div className="h-3 bg-orange-200 rounded w-1/2" />
+            <div className="h-5 bg-orange-200 rounded w-3/4" />
+          </div>
+        </div>
+      ))}
+      {/* Chart placeholder (Top Selling) */}
+      <div className="rounded-2xl border border-orange-100 bg-orange-50 animate-pulse p-4 mt-2">
+        <div className="h-4 bg-orange-200 rounded w-1/3 mb-4" />
+        <div className="flex flex-col gap-3">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="flex flex-col gap-1.5">
+              <div className="flex justify-between">
+                <div className="h-3 bg-orange-200 rounded w-1/3" />
+                <div className="h-3 bg-orange-200 rounded w-12" />
+              </div>
+              <div className="h-2.5 bg-orange-200 rounded-full w-full" />
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Chart placeholder (Growth) */}
+      <div className="rounded-2xl border border-orange-100 bg-orange-50 animate-pulse p-4">
+        <div className="h-4 bg-orange-200 rounded w-1/3 mb-4" />
+        <div className="h-48 bg-orange-100 rounded-xl" />
+      </div>
     </div>
   );
 }
