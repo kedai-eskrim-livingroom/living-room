@@ -147,19 +147,19 @@ function VoucherFormModal({ isOpen, onClose, onSubmit, editData }) {
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         showCloseButton={false}
-        className="w-[calc(100%-2rem)] sm:max-w-sm bg-[#FFF8F0] rounded-3xl border-none p-0 gap-0"
+        className="w-[calc(100%-2rem)] sm:max-w-md bg-[#FFF8F0] rounded-2xl border border-orange-500 p-0 gap-0"
       >
         {/* Header */}
         <DialogHeader className="flex flex-row items-center justify-between px-6 pt-6 pb-2">
-          <DialogTitle className="text-xl font-bold text-gray-900">
+          <DialogTitle className="text-xl font-bold text-black">
             {isEdit ? "Edit Voucher" : "Tambah Voucher Baru"}
           </DialogTitle>
           <DialogClose asChild>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-full hover:bg-orange-100 transition-colors"
+              className="p-1.5 rounded-md hover:bg-orange-100 transition-colors"
             >
-              <X className="w-5 h-5 text-gray-700" />
+              <X className="w-5 h-5 text-neutral-700" />
             </button>
           </DialogClose>
         </DialogHeader>
@@ -175,16 +175,16 @@ function VoucherFormModal({ isOpen, onClose, onSubmit, editData }) {
 
           {/* Code */}
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold text-gray-800">Code</label>
+            <label className="text-sm font-semibold text-neutral-800">Code</label>
             <input
               id="voucher-code"
               type="text"
               placeholder="Code"
               value={form.code}
               onChange={(e) => handleChange("code", e.target.value)}
-              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-gray-400 ${errors.code
+              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-neutral-400 ${errors.code
                 ? "border-red-400 focus:border-red-500"
-                : "border-gray-200 focus:border-[#FF7A00]"
+                : "border-neutral-200 focus:border-[#FF7A00]"
                 }`}
             />
             {errors.code && (
@@ -194,7 +194,7 @@ function VoucherFormModal({ isOpen, onClose, onSubmit, editData }) {
 
           {/* Discount */}
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold text-gray-800">Discount</label>
+            <label className="text-sm font-semibold text-neutral-800">Discount</label>
             <input
               id="voucher-discount"
               type="text"
@@ -202,9 +202,9 @@ function VoucherFormModal({ isOpen, onClose, onSubmit, editData }) {
               placeholder="Rp0.000"
               value={form.discount ? `Rp${formatRupiah(form.discount)}` : ""}
               onChange={handleDiscountChange}
-              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-gray-400 ${errors.discount
+              className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-neutral-400 ${errors.discount
                 ? "border-red-400 focus:border-red-500"
-                : "border-gray-200 focus:border-[#FF7A00]"
+                : "border-neutral-200 focus:border-[#FF7A00]"
                 }`}
             />
             {errors.discount && (
@@ -214,7 +214,7 @@ function VoucherFormModal({ isOpen, onClose, onSubmit, editData }) {
 
           {/* Masa Berlaku (Start – End) */}
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold text-gray-800">
+            <label className="text-sm font-semibold text-neutral-800">
               Masa Berlaku
             </label>
             <DateRangeModal
@@ -230,16 +230,16 @@ function VoucherFormModal({ isOpen, onClose, onSubmit, editData }) {
                   type="button"
                   className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors flex items-center gap-2 text-left ${errors.startDate || errors.endDate
                     ? "border-red-400"
-                    : "border-gray-200 hover:border-[#FF7A00]"
+                    : "border-neutral-200 hover:border-[#FF7A00]"
                     }`}
                 >
                   <CalendarDays
-                    className={`w-4 h-4 shrink-0 ${form.startDate || form.endDate ? "text-[#FF7A00]" : "text-gray-400"
+                    className={`w-4 h-4 shrink-0 ${form.startDate || form.endDate ? "text-[#FF7A00]" : "text-neutral-400"
                       }`}
                   />
                   <span
                     className={
-                      form.startDate || form.endDate ? "text-gray-900" : "text-gray-400"
+                      form.startDate || form.endDate ? "text-neutral-900" : "text-neutral-400"
                     }
                   >
                     {form.startDate && form.endDate
@@ -310,17 +310,17 @@ function DeleteModal({ isOpen, onClose, onConfirm, voucher }) {
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         showCloseButton={false}
-        className="w-[calc(100%-2rem)] sm:max-w-xs bg-[#FFF8F0] rounded-3xl border-none p-6 gap-0"
+        className="w-[calc(100%-2rem)] sm:max-w-sm bg-[#FFF8F0] rounded-2xl border border-orange-500 p-6 gap-0"
       >
         <VisuallyHidden>
           <DialogTitle>Konfirmasi Hapus Voucher</DialogTitle>
         </VisuallyHidden>
         <div className="flex flex-col items-center text-center gap-3">
-          <h2 className="text-lg font-bold text-gray-900">
+          <h2 className="text-lg font-bold text-neutral-900">
             Hapus voucher{" "}
             <span className="text-[#FF7A00]">{voucher?.code}</span>?
           </h2>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-black">
             Anda yakin ingin menghapus voucher{" "}
             <span className="font-semibold">{voucher?.code}</span> dari daftar
             voucher?
@@ -484,14 +484,14 @@ export default function VoucherPage() {
 
       {/* Search */}
       <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
         <input
           id="voucher-search"
           type="text"
           placeholder="Cari voucher..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-3 text-sm outline-none focus:border-[#FF7A00] transition-colors placeholder:text-gray-400"
+          className="w-full bg-neutral-50 border border-neutral-200 rounded-xl pl-10 pr-4 py-3 text-sm outline-none focus:border-[#FF7A00] transition-colors placeholder:text-neutral-400"
         />
       </div>
 
@@ -520,7 +520,7 @@ export default function VoucherPage() {
         {isLoading ? (
           Array.from({ length: 5 }).map((_, i) => <SkeletonCard key={i} />)
         ) : filtered.length === 0 ? (
-          <div className="text-center py-16 text-gray-400 text-sm">
+          <div className="text-center py-16 text-neutral-400 text-sm">
             {search
               ? `Tidak ada voucher dengan code "${search}".`
               : "Belum ada voucher. Tambahkan voucher baru!"}
