@@ -17,7 +17,7 @@ export default function DropdownMenu({
       {/* Edit Button */}
       <button
         onClick={onEdit}
-        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-blue-50 transition-colors text-blue-500 group"
+        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-blue-50 transition-colors text-blue-500 group cursor-pointer"
       >
         <IconPencil size={20} stroke={2} />
         <span className="font-semibold text-base">Edit Akun</span>
@@ -29,7 +29,7 @@ export default function DropdownMenu({
       {/* Delete Button */}
       <button
         onClick={onDelete}
-        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition-colors text-red-500 group"
+        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition-colors text-red-500 group cursor-pointer"
       >
         <IconTrash size={20} stroke={2} />
         <span className="font-semibold text-base">Hapus Akun</span>

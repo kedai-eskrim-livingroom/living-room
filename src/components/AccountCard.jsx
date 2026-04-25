@@ -48,7 +48,7 @@ export default function AccountCard({
       <div className="relative" ref={menuRef}>
         <button 
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="p-2 hover:bg-neutral-100 rounded-full transition-colors text-neutral-500"
+          className="p-2 hover:bg-neutral-100 rounded-full transition-colors text-neutral-500 cursor-pointer"
         >
           <IconDotsVertical size={20} />
         </button>

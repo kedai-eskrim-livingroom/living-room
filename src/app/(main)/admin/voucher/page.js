@@ -386,14 +386,14 @@ function VoucherCard({ voucher, onEdit, onDelete }) {
       <div className="flex flex-col">
         <button
           onClick={() => onEdit(voucher)}
-          className="flex-1 bg-[#DDEEFF] hover:bg-[#C4DDFF] flex items-center justify-center px-4 transition-colors"
+          className="flex-1 bg-[#DDEEFF] hover:bg-[#C4DDFF] flex items-center justify-center px-4 transition-colors cursor-pointer"
           title="Edit voucher"
         >
           <Pencil className="w-4 h-4 text-[#2563EB]" />
         </button>
         <button
           onClick={() => onDelete(voucher)}
-          className="flex-1 bg-[#FFE0E8] hover:bg-[#FFC7D4] flex items-center justify-center px-4 transition-colors"
+          className="flex-1 bg-[#FFE0E8] hover:bg-[#FFC7D4] flex items-center justify-center px-4 transition-colors cursor-pointer"
           title="Hapus voucher"
         >
           <Trash2 className="w-4 h-4 text-red-500" />
@@ -502,7 +502,7 @@ export default function VoucherPage() {
       <button
         id="voucher-tambah-btn"
         onClick={() => setFormModal({ open: true, editData: null })}
-        className="w-full bg-[#FF7A00] hover:bg-[#E56E00] text-white font-bold text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors"
+        className="w-full bg-[#FF7A00] hover:bg-[#E56E00] text-white font-bold text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors cursor-pointer"
       >
         <Plus className="w-4 h-4" strokeWidth={2.5} />
         Tambah Voucher

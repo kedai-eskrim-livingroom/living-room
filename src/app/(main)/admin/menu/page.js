@@ -169,8 +169,8 @@ function MenuFormModal({ isOpen, onClose, onSubmit, editData }) {
               value={form.name}
               onChange={(e) => handleChange("name", e.target.value)}
               className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-neutral-400 ${errors.name
-                  ? "border-red-400 focus:border-red-500"
-                  : "border-neutral-200 focus:border-[#FF7A00]"
+                ? "border-red-400 focus:border-red-500"
+                : "border-neutral-200 focus:border-[#FF7A00]"
                 }`}
             />
             {errors.name && <p className="text-xs text-red-500 mt-0.5">{errors.name}</p>}
@@ -185,8 +185,8 @@ function MenuFormModal({ isOpen, onClose, onSubmit, editData }) {
               value={form.description}
               onChange={(e) => handleChange("description", e.target.value)}
               className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-neutral-400 resize-none ${errors.description
-                  ? "border-red-400 focus:border-red-500"
-                  : "border-neutral-200 focus:border-[#FF7A00]"
+                ? "border-red-400 focus:border-red-500"
+                : "border-neutral-200 focus:border-[#FF7A00]"
                 }`}
             />
             {errors.description && (
@@ -204,8 +204,8 @@ function MenuFormModal({ isOpen, onClose, onSubmit, editData }) {
               value={form.price ? `Rp${formatRupiah(form.price)}` : ""}
               onChange={handlePriceChange}
               className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-neutral-400 ${errors.price
-                  ? "border-red-400 focus:border-red-500"
-                  : "border-neutral-200 focus:border-[#FF7A00]"
+                ? "border-red-400 focus:border-red-500"
+                : "border-neutral-200 focus:border-[#FF7A00]"
                 }`}
             />
             {errors.price && <p className="text-xs text-red-500 mt-0.5">{errors.price}</p>}
@@ -233,8 +233,8 @@ function MenuFormModal({ isOpen, onClose, onSubmit, editData }) {
               accept="image/*"
               onChange={(e) => handleChange("photoFile", e.target.files?.[0] ?? null)}
               className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors ${errors.photo
-                  ? "border-red-400 focus:border-red-500"
-                  : "border-neutral-200 focus:border-[#FF7A00]"
+                ? "border-red-400 focus:border-red-500"
+                : "border-neutral-200 focus:border-[#FF7A00]"
                 }`}
             />
             {errors.photo && <p className="text-xs text-red-500 mt-0.5">{errors.photo}</p>}
@@ -359,14 +359,14 @@ function MenuCard({ menu, onEdit, onDelete }) {
       <div className="flex flex-col">
         <button
           onClick={() => onEdit(menu)}
-          className="flex-1 bg-[#DDEEFF] hover:bg-[#C4DDFF] flex items-center justify-center px-4 transition-colors"
+          className="flex-1 bg-[#DDEEFF] hover:bg-[#C4DDFF] flex items-center justify-center px-4 transition-colors cursor-pointer"
           title="Edit menu"
         >
           <Pencil className="w-4 h-4 text-[#2563EB]" />
         </button>
         <button
           onClick={() => onDelete(menu)}
-          className="flex-1 bg-[#FFE0E8] hover:bg-[#FFC7D4] flex items-center justify-center px-4 transition-colors"
+          className="flex-1 bg-[#FFE0E8] hover:bg-[#FFC7D4] flex items-center justify-center px-4 transition-colors cursor-pointer"
           title="Hapus menu"
         >
           <Trash2 className="w-4 h-4 text-red-500" />
@@ -464,7 +464,7 @@ export default function MenuAdminPage() {
       <button
         id="menu-tambah-btn"
         onClick={() => setFormModal({ open: true, editData: null })}
-        className="w-full bg-[#FF7A00] hover:bg-[#E56E00] text-white font-bold text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors"
+        className="w-full bg-[#FF7A00] hover:bg-[#E56E00] text-white font-bold text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors cursor-pointer"
       >
         <Plus className="w-4 h-4" strokeWidth={2.5} />
         Tambah Menu

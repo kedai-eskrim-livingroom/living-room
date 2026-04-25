@@ -140,7 +140,7 @@ export default function RiwayatAdminPage() {
                     isExport={true}
                     onAction={async (start, end) => await exportExcel(start, end)}
                     triggerNode={
-                        <Button className="w-full bg-orange-500 hover:bg-orange-700 text-white rounded-lg py-2 px-4 gap-1 font-semibold text-sm min-h-10.5">
+                        <Button className="w-full bg-orange-500 hover:bg-orange-700 text-white rounded-lg py-2 px-4 gap-1 font-semibold text-sm min-h-10.5 cursor-pointer">
                             <IconFileExport className="w-5 h-5" /> Export
                         </Button>
                     }
@@ -153,7 +153,7 @@ export default function RiwayatAdminPage() {
                     onAction={(start, end) => setDateFilter({ start, end })}
                     triggerNode={
                         <button
-                            className="flex items-center gap-2 w-full px-4 py-2 bg-white border border-neutral-300 rounded-lg text-sm text-neutral-400 transition-colors text-left font-medium hover:border-orange-500 focus:outline-none"
+                            className="flex items-center gap-2 w-full px-4 py-2 bg-white border border-neutral-300 rounded-lg text-sm text-neutral-400 transition-colors text-left font-medium hover:border-orange-500 focus:outline-none cursor-pointer"
                         >
                             <span className="text-neutral-400"><IconCalendarWeek size={20} stroke={2} /></span>
                             {dateLabel || "Pilih tanggal"}

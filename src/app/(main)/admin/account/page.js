@@ -137,11 +137,10 @@ function AccountFormModal({ isOpen, onClose, onSubmit, editData }) {
                             placeholder="email@mail.com"
                             value={form.email}
                             onChange={(e) => handleChange("email", e.target.value)}
-                            className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-neutral-400 ${
-                                errors.email
+                            className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-neutral-400 ${errors.email
                                     ? "border-red-400 focus:border-red-500"
                                     : "border-neutral-200 focus:border-[#FF7A00]"
-                            }`}
+                                }`}
                         />
                         {errors.email && <p className="text-xs text-red-500 mt-0.5">{errors.email}</p>}
                     </div>
@@ -155,11 +154,10 @@ function AccountFormModal({ isOpen, onClose, onSubmit, editData }) {
                                 placeholder={isEdit ? "••••••••" : "Masukan password"}
                                 value={form.password}
                                 onChange={(e) => handleChange("password", e.target.value)}
-                                className={`w-full bg-white rounded-xl px-4 py-3 pr-10 text-sm outline-none border transition-colors placeholder:text-neutral-400 ${
-                                    errors.password
+                                className={`w-full bg-white rounded-xl px-4 py-3 pr-10 text-sm outline-none border transition-colors placeholder:text-neutral-400 ${errors.password
                                         ? "border-red-400 focus:border-red-500"
                                         : "border-neutral-200 focus:border-[#FF7A00]"
-                                }`}
+                                    }`}
                             />
                             <button
                                 type="button"
@@ -181,11 +179,10 @@ function AccountFormModal({ isOpen, onClose, onSubmit, editData }) {
                                 placeholder={isEdit ? "••••••••" : "Masukan ulang password"}
                                 value={form.confirmPassword}
                                 onChange={(e) => handleChange("confirmPassword", e.target.value)}
-                                className={`w-full bg-white rounded-xl px-4 py-3 pr-10 text-sm outline-none border transition-colors placeholder:text-neutral-400 ${
-                                    errors.confirmPassword
+                                className={`w-full bg-white rounded-xl px-4 py-3 pr-10 text-sm outline-none border transition-colors placeholder:text-neutral-400 ${errors.confirmPassword
                                         ? "border-red-400 focus:border-red-500"
                                         : "border-neutral-200 focus:border-[#FF7A00]"
-                                }`}
+                                    }`}
                             />
                             <button
                                 type="button"
@@ -352,7 +349,7 @@ export default function AccountAdminPage() {
             {/* Tombol Tambah Akun */}
             <button
                 onClick={() => setFormModal({ open: true, editData: null })}
-                className="w-full bg-[#FF7A00] hover:bg-[#E56E00] text-white font-bold text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors"
+                className="w-full bg-[#FF7A00] hover:bg-[#E56E00] text-white font-bold text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors cursor-pointer"
             >
                 <Plus className="w-4 h-4" strokeWidth={2.5} />
                 Tambah Akun

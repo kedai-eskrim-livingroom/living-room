@@ -104,7 +104,7 @@ export default function SidebarContent() {
       <div className="mt-auto pt-6">
         <Button 
           onClick={handleLogout}
-          className="w-full bg-[#FF7A00] hover:bg-[#E56E00] text-white flex items-center justify-center gap-2 py-6 rounded-lg font-semibold"
+          className="w-full bg-orange-500 hover:bg-orange-700 cursor-pointer text-white flex items-center justify-center gap-2 py-2 px-4 rounded-[8px] min-h-10.5 font-semibold"
         >
           <IconLogout className="w-5 h-5" />
           Keluar

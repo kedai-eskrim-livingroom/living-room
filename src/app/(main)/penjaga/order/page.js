@@ -201,7 +201,7 @@ export default function POSPage() {
           <div className="bg-neutral-50 rounded-t-[32px] pt-4 pb-6 px-5 shadow-[0_-15px_40px_rgba(0,0,0,0.08)] border-t border-neutral-300">
             <button
               onClick={() => setActiveScreen("cart")}
-              className="w-full bg-orange-500 hover:bg-orange-700 active:scale-[0.98] transition-all text-white rounded-2xl p-4 px-5 flex items-center justify-between"
+              className="w-full bg-orange-500 hover:bg-orange-700 active:scale-[0.98] transition-all text-white rounded-2xl p-4 px-5 flex items-center justify-between cursor-pointer"
             >
               <div className="flex flex-col text-left text-white">
                 <span className="font-semibold text-[20px] leading-tight">{totalItems} Item</span>
@@ -221,7 +221,7 @@ export default function POSPage() {
         <header className="flex lg:hidden items-center pb-4 bg-white ">
           <button
             onClick={() => setActiveScreen("catalog")}
-            className="p-2 -ml-2 rounded-full hover:bg-neutral-200 transition-colors"
+            className="p-2 -ml-2 rounded-full hover:bg-neutral-200 transition-colors cursor-pointer"
           >
             <IconArrowNarrowLeft className="w-6 h-6 text-neutral-950" stroke={2.5} />
           </button>
@@ -318,7 +318,7 @@ export default function POSPage() {
           </div>
 
           {/* METODE PEMBAYARAN */}
-          <button onClick={() => setIsPaymentSheetOpen(true)} className="flex items-center justify-between w-full bg-white border border-neutral-950 rounded-[20px] px-5 py-3 h-[60px] hover:bg-neutral-50 transition-colors shadow-sm">
+          <button onClick={() => setIsPaymentSheetOpen(true)} className="flex items-center justify-between w-full bg-white border border-neutral-950 rounded-[20px] px-5 py-3 h-[60px] hover:bg-neutral-50 transition-colors shadow-sm cursor-pointer">
             <div className="flex items-center gap-3">
               {paymentMethod === "QRIS" ? <Image src={"/qris.svg"} width={42} height={16} alt="QRIS" /> : <IconCash className="w-6 h-6 text-neutral-950" stroke={1.5} />}
               <span className="font-medium text-neutral-950 text-[14px]">{paymentMethod}</span>
@@ -335,7 +335,7 @@ export default function POSPage() {
             <Button
               onClick={handleSaveOrder}
               disabled={isSaving || cart.length === 0}
-              className="bg-orange-500 hover:bg-orange-700 text-neutral-50 rounded-[8px] h-full py-2 px-4 font-semibold disabled:opacity-70 text-[14px]"
+              className="bg-orange-500 hover:bg-orange-700 text-neutral-50 rounded-[8px] h-full py-2 px-4 font-semibold disabled:opacity-70 text-[14px] cursor-pointer"
             >
               {isSaving ? <IconLoader2 className="w-6 h-6 mr-2 animate-spin" stroke={2.5} /> : <IconReportAnalytics className="w-6 h-6 mr-1" stroke={2.5} />}
               {isSaving ? "Proses..." : "Simpan Penjualan"}
@@ -354,17 +354,17 @@ export default function POSPage() {
             <SheetTitle className="text-xl font-bold text-neutral-950 text-left">Metode Pembayaran</SheetTitle>
             <button
               onClick={() => setIsPaymentSheetOpen(false)}
-              className="p-1.5 -mr-2 rounded-full hover:bg-neutral-100 transition-colors"
+              className="p-1.5 -mr-2 rounded-full hover:bg-neutral-100 transition-colors cursor-pointer"
             >
               <IconX className="w-5 h-5 text-neutral-950" stroke={2.5} />
             </button>
           </SheetHeader>
           <div className="flex flex-col gap-3">
-            <button onClick={() => { setPaymentMethod("CASH"); setIsPaymentSheetOpen(false); }} className={`flex items-center justify-between w-full border ${paymentMethod === "CASH" ? "border-orange-500 bg-orange-100" : "border-neutral-200 bg-white"} rounded-2xl px-5 py-4 hover:bg-neutral-50 transition-colors`}>
+            <button onClick={() => { setPaymentMethod("CASH"); setIsPaymentSheetOpen(false); }} className={`flex items-center justify-between w-full border ${paymentMethod === "CASH" ? "border-orange-500 bg-orange-100" : "border-neutral-200 bg-white"} rounded-2xl px-5 py-4 hover:bg-neutral-50 transition-colors cursor-pointer`}>
               <div className="flex items-center gap-3"><IconCash className="w-6 h-6 mr-4.5 text-neutral-950" stroke={1.5} /><span className="text-[14px] font-medium text-neutral-950">Cash</span></div>
               <IconArrowNarrowRight className="w-5 h-5 text-neutral-950" stroke={2} />
             </button>
-            <button onClick={() => { setPaymentMethod("QRIS"); setIsPaymentSheetOpen(false); }} className={`flex items-center justify-between w-full border ${paymentMethod === "QRIS" ? "border-orange-500 bg-orange-100" : "border-neutral-200 bg-white"} rounded-2xl px-5 py-4 hover:bg-neutral-50 transition-colors`}>
+            <button onClick={() => { setPaymentMethod("QRIS"); setIsPaymentSheetOpen(false); }} className={`flex items-center justify-between w-full border ${paymentMethod === "QRIS" ? "border-orange-500 bg-orange-100" : "border-neutral-200 bg-white"} rounded-2xl px-5 py-4 hover:bg-neutral-50 transition-colors cursor-pointer`}>
               <div className="flex items-center gap-3"><Image src={"/qris.svg"} width={42} height={16} alt="QRIS" /><span className="text-[14px] font-medium text-neutral-950">QRIS</span></div>
               <IconArrowNarrowRight className="w-5 h-5 text-neutral-950" stroke={2} />
             </button>
