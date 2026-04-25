@@ -407,15 +407,18 @@ function VoucherCard({ voucher, onEdit, onDelete }) {
 
 function SkeletonCard() {
   return (
-    <div className="flex items-stretch rounded-2xl overflow-hidden border border-orange-100 animate-pulse">
-      <div className="bg-orange-100 w-14 min-h-20 relative">
-        {/* Notch left edge placeholder */}
-        <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-[#F8F9FA] rounded-full" />
+    <div className="flex items-stretch rounded-2xl overflow-hidden animate-pulse">
+      {/* Left: matches VoucherCard — min-w-13, px-3, dashed border */}
+      <div className="bg-orange-100 flex items-center justify-center px-3 min-w-13 border-r-2 border-dashed border-orange-200 relative">
+        <div className="w-2 h-12 bg-orange-200 rounded-full" />
+        <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-white rounded-full" />
       </div>
-      <div className="flex-1 bg-orange-50 px-4 py-4 flex flex-col justify-center gap-2">
+      {/* Middle: matches VoucherCard — bg-[#FFF8F0], px-4 py-4 */}
+      <div className="flex-1 bg-[#FFF8F0] px-4 py-4 flex flex-col justify-center gap-2">
         <div className="h-4 bg-orange-200 rounded w-3/4" />
         <div className="h-3 bg-orange-100 rounded w-1/2" />
       </div>
+      {/* Right: matches VoucherCard action buttons */}
       <div className="flex flex-col w-12">
         <div className="flex-1 bg-blue-100" />
         <div className="flex-1 bg-pink-100" />

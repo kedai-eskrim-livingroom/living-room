@@ -224,10 +224,9 @@ export default function Dashboard() {
   const maxItems = Math.max(...topSelling.map((x) => x.sold || x.totalItems || 0), 1);
 
   return (
-    <>
-      <div className="flex flex-col gap-6 max-w-2xl mx-auto pb-10">
+    <div className="flex flex-col gap-6 max-w-2xl mx-auto pb-10">
 
-        <h1 className="text-2xl font-extrabold text-black mt-2">Dashboard</h1>
+        <h1 className="text-2xl font-bold text-neutral-900 mt-2">Dashboard</h1>
 
         {/* Period Buttons */}
         <div className="flex gap-2">
@@ -263,7 +262,7 @@ export default function Dashboard() {
         />
 
         {loading ? <Skeleton /> : (
-          <div style={{ animation: "fadeUp 0.35s ease-out" }}>
+          <div>
 
             {/* Stat Cards dengan Ikon Tabler */}
             <div className="flex flex-col gap-4 mb-6">
@@ -294,7 +293,7 @@ export default function Dashboard() {
             </div>
 
             {/* Top Selling */}
-            <div className="bg-orange-100 rounded-2xl border border-orange-500 p-4 mb-6" style={{ animation: "fadeUp 0.4s ease-out 180ms both" }}>
+            <div className="bg-orange-100 rounded-2xl border border-orange-500 p-4 mb-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-extrabold text-neutral-950 text-lg tracking-tight">Top Selling</h2>
               </div>
@@ -317,11 +316,11 @@ export default function Dashboard() {
             </div>
 
             {/* Growth Chart */}
-            <div className="bg-orange-100 rounded-2xl border border-orange-500 p-4" style={{ animation: "fadeUp 0.4s ease-out 240ms both" }}>
-              <h2 className="font-extrabold text-gray-900 text-lg tracking-tight mb-2">Growth Penjualan</h2>
+            <div className="bg-orange-100 rounded-2xl border border-orange-500 p-4">
+              <h2 className="font-bold text-neutral-900 text-lg tracking-tight mb-2">Growth Penjualan</h2>
 
               {growthData.length === 0 ? (
-                <div className="py-10 text-center text-sm text-gray-500 font-medium italic">
+                <div className="py-10 text-center text-sm text-neutral-500 font-medium italic">
                   Belum ada data penjualan
                 </div>
               ) : (
@@ -331,9 +330,6 @@ export default function Dashboard() {
 
           </div>
         )}
-      </div>
-
-
-    </>
+    </div>
   );
 }
