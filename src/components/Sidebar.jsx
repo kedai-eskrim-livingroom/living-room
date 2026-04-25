@@ -9,7 +9,8 @@ import {
   IconHistory, 
   IconToolsKitchen2, 
   IconTicket, 
-  IconLogout 
+  IconLogout, 
+  IconUser
 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { getUser, logoutUser } from "@/services/auth";
@@ -37,6 +38,7 @@ export default function SidebarContent() {
     { name: "Riwayat", href: "/admin/history", icon: IconHistory },
     { name: "Menu", href: "/admin/menu", icon: IconToolsKitchen2 },
     { name: "Voucher", href: "/admin/voucher", icon: IconTicket },
+    { name: "Akun", href: "/admin/account", icon: IconUser },
   ];
 
   const handleLogout = () => {
