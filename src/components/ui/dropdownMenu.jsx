@@ -11,13 +11,13 @@ export default function DropdownMenu({
 }) {
   return (
     <div className={cn(
-      "absolute right-0 top-full mt-2 w-48 bg-white border border-neutral-200 rounded-2xl shadow-xl z-50 overflow-hidden py-1",
+      "absolute right-0 top-full mt-2 w-48 bg-white border border-neutral-200 rounded-xl shadow-xl z-50 overflow-hidden py-1",
       className
     )}>
       {/* Edit Button */}
       <button
         onClick={onEdit}
-        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-blue-50 transition-colors text-blue-500 group cursor-pointer"
+        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-sky-50 transition-colors text-sky-500 group cursor-pointer"
       >
         <IconPencil size={20} stroke={2} />
         <span className="font-semibold text-base">Edit Akun</span>
