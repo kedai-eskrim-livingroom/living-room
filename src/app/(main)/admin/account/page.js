@@ -17,6 +17,15 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
+
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import AccountCard from "@/components/AccountCard";
 
@@ -41,7 +50,7 @@ function SkeletonAccountCard() {
 function AccountFormModal({ isOpen, onClose, onSubmit, editData }) {
     const isEdit = !!editData;
 
-    const [form, setForm] = useState({ email: "", password: "", confirmPassword: "" });
+    const [form, setForm] = useState({ email: "", password: "", role: "", confirmPassword: "" });
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -50,9 +59,9 @@ function AccountFormModal({ isOpen, onClose, onSubmit, editData }) {
     useEffect(() => {
         if (!isOpen) return;
         if (isEdit && editData) {
-            setForm({ email: editData.email ?? "", password: "", confirmPassword: "" });
+            setForm({ email: editData.email ?? "", password: "", role: editData.role ?? "", confirmPassword: "" });
         } else {
-            setForm({ email: "", password: "", confirmPassword: "" });
+            setForm({ email: "", role: "", password: "", confirmPassword: "" });
         }
         setErrors({});
         setShowPassword(false);
@@ -63,7 +72,7 @@ function AccountFormModal({ isOpen, onClose, onSubmit, editData }) {
         const errs = {};
         if (!form.email.trim()) errs.email = "Email wajib diisi.";
         else if (!/\S+@\S+\.\S+/.test(form.email)) errs.email = "Format email tidak valid.";
-
+        if (!form.role) errs.role = "Role wajib dipilih.";
         if (!isEdit) {
             if (!form.password) errs.password = "Password wajib diisi.";
             else if (form.password.length < 6) errs.password = "Password minimal 6 karakter.";
@@ -91,7 +100,7 @@ function AccountFormModal({ isOpen, onClose, onSubmit, editData }) {
         }
         setIsSubmitting(true);
         try {
-            const payload = { email: form.email.trim() };
+            const payload = { email: form.email.trim(), role: form.role };
             if (form.password) payload.password = form.password;
             await onSubmit(payload);
             onClose();
@@ -138,11 +147,30 @@ function AccountFormModal({ isOpen, onClose, onSubmit, editData }) {
                             value={form.email}
                             onChange={(e) => handleChange("email", e.target.value)}
                             className={`w-full bg-white rounded-xl px-4 py-3 text-sm outline-none border transition-colors placeholder:text-neutral-400 ${errors.email
-                                    ? "border-red-400 focus:border-red-500"
-                                    : "border-neutral-200 focus:border-[#FF7A00]"
+                                ? "border-red-400 focus:border-red-500"
+                                : "border-neutral-200 focus:border-[#FF7A00]"
                                 }`}
                         />
                         {errors.email && <p className="text-xs text-red-500 mt-0.5">{errors.email}</p>}
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                        <label className="text-sm font-semibold text-neutral-800">Role</label>
+                        <Select value={form.role} onValueChange={(val) => handleChange("role", val)}>
+                            <SelectTrigger
+                                className={`w-full bg-white rounded-xl px-4 py-5 h-auto text-sm outline-none border transition-colors ${errors.role
+                                    ? "border-red-400 focus:ring-red-500 focus:border-red-500"
+                                    : "border-neutral-200 focus:ring-[#FF7A00] focus:border-[#FF7A00]"
+                                    }`}
+                            >
+                                <SelectValue placeholder="Pilih Role (Admin / Penjaga)" />
+                            </SelectTrigger>
+                            <SelectContent className="bg-white rounded-xl border-neutral-200">
+                                <SelectItem value="ADMIN" className="cursor-pointer">ADMIN</SelectItem>
+                                <SelectItem value="PENJAGA" className="cursor-pointer">PENJAGA</SelectItem>
+                            </SelectContent>
+                        </Select>
+                        {errors.role && <p className="text-xs text-red-500 mt-0.5">{errors.role}</p>}
                     </div>
 
                     {/* Password */}
@@ -155,8 +183,8 @@ function AccountFormModal({ isOpen, onClose, onSubmit, editData }) {
                                 value={form.password}
                                 onChange={(e) => handleChange("password", e.target.value)}
                                 className={`w-full bg-white rounded-xl px-4 py-3 pr-10 text-sm outline-none border transition-colors placeholder:text-neutral-400 ${errors.password
-                                        ? "border-red-400 focus:border-red-500"
-                                        : "border-neutral-200 focus:border-[#FF7A00]"
+                                    ? "border-red-400 focus:border-red-500"
+                                    : "border-neutral-200 focus:border-[#FF7A00]"
                                     }`}
                             />
                             <button
@@ -180,8 +208,8 @@ function AccountFormModal({ isOpen, onClose, onSubmit, editData }) {
                                 value={form.confirmPassword}
                                 onChange={(e) => handleChange("confirmPassword", e.target.value)}
                                 className={`w-full bg-white rounded-xl px-4 py-3 pr-10 text-sm outline-none border transition-colors placeholder:text-neutral-400 ${errors.confirmPassword
-                                        ? "border-red-400 focus:border-red-500"
-                                        : "border-neutral-200 focus:border-[#FF7A00]"
+                                    ? "border-red-400 focus:border-red-500"
+                                    : "border-neutral-200 focus:border-[#FF7A00]"
                                     }`}
                             />
                             <button
@@ -379,6 +407,7 @@ export default function AccountAdminPage() {
                             key={account.id}
                             index={index + 1}
                             email={account.email}
+                            role={account.role}
                             onEdit={() => setFormModal({ open: true, editData: account })}
                             onDelete={() => setDeleteModal({ open: true, account })}
                         />

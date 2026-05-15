@@ -7,6 +7,7 @@ import DropdownMenu from "./ui/dropdownMenu";
 export default function AccountCard({ 
   index, 
   email,
+  role,
   onEdit,
   onDelete
 }) {
@@ -39,6 +40,9 @@ export default function AccountCard({
         <div className="flex flex-col">
           <span className="font-medium text-neutral-800 text-base">
             {email}
+          </span>
+          <span className="text-sm text-neutral-500">
+            {role}
           </span>
         </div>
 
