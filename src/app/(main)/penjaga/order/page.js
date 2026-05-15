@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { getUser } from "@/services/auth";
 
 const fetcher = async () => {
   const response = await getMenuPenjaga();
@@ -27,6 +28,7 @@ const fetcher = async () => {
 export default function POSPage() {
   const [activeScreen, setActiveScreen] = useState("catalog");
   const [cart, setCart] = useState([]);
+  const user = getUser();
 
   const [toast, setToast] = useState({ show: false, message: "", type: "success" });
 
@@ -117,7 +119,8 @@ export default function POSPage() {
           menuId: item.id,
           qty: item.qty,
           price: item.price
-        }))
+        })),
+        userId: user?.id || null,
       };
       await createOrder(payload);
 
