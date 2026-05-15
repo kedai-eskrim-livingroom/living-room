@@ -7,13 +7,15 @@ import { id } from "date-fns/locale"; // Untuk format tanggal bahasa Indonesia
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 import {
     IconReceipt,
     IconCalendarWeek,
     IconCash,
     IconLoader2,
     IconFileExport,
-    IconWallet
+    IconWallet,
+    IconHistory
 } from '@tabler/icons-react';
 
 import DateRangeModal from "@/components/DateRangeModal";
@@ -160,6 +162,11 @@ export default function RiwayatAdminPage() {
                         </button>
                     }
                 />
+                <Link href='manage-history'>
+                <Button className="w-full bg-orange-500 hover:bg-orange-700 text-white rounded-lg py-2 px-4 gap-1 font-semibold text-sm min-h-10.5 cursor-pointer">
+                    <IconHistory className="w-5 h-5" /> Kelola Histori
+                </Button>
+                </Link>
             </div>
 
             {/* Daftar Riwayat Transaksi */}

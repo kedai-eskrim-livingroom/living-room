@@ -61,3 +61,11 @@ export async function exportExcel(startDate, endDate) {
         throw err;
     }
 }
+
+export async function deleteOrders(id) {
+    const res = await axiosInstance.delete(`/orders/delete`, {
+        headers: { "Content-Type": "application/json" },
+        data: { id: id },
+    });
+    return res.data;
+}
